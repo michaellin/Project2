@@ -57,7 +57,6 @@ public class WordOnBoardFinder {
 					}
 					list = cellsForWordHelper(r, c, board, word, list, index, alreadyUsed);
 					if (list.size() == (word.length()-numberOfQu(word))) {
-						System.out.println("Is this actually printing as early as it was supposed to?");
 						return list; //if finished list is of correct length, return it here and now so the next iteration cannot throw it off
 					}
 					list = new ArrayList<BoardCell>(); //if on this first run through complete word cannot be found, list is reset
@@ -72,7 +71,6 @@ public class WordOnBoardFinder {
 					}
 					list = cellsForWordHelper(r, c, board, word, list, index, alreadyUsed);
 					if (list.size() == (word.length()-numberOfQu(word))) {
-						System.out.println("Is this actually printing as early as it was supposed to?");
 						return list; //if finished list is of correct length, return it here and now so the next iteration cannot throw it off
 					}
 					list = new ArrayList<BoardCell>(); //if on this first run through complete word cannot be found, list is reset
@@ -108,11 +106,7 @@ public class WordOnBoardFinder {
   private List<BoardCell> cellsForWordHelper(int row, int col, BoggleBoard board, String word, List<BoardCell> toReturn, int index, boolean [][] alreadyUsed) {
 	  alreadyUsed[row][col] = true; 
 	  toReturn.add(new BoardCell(row, col));
-	  System.out.println("Found " + board.getFace(row, col));
 	  if (index == word.length()) { 
-		  System.out.println("The complete word has been returned.");
-		  System.out.println("Size of this list is " + toReturn.size());
-		  System.out.println("The length of this word - instances of Qu is " + (word.length()-numberOfQu(word)));
 		  return toReturn; //if finished list is of correct length, return it here and now
 	  }
 	  for (int r = 0; r < board.size(); r++) { //these two for-loops look through the entire board for the letters of the word top-to-bottom, left-to-right
