@@ -107,5 +107,155 @@ public class WordOnBoardFinder {
 				}
 			}
 		}
+		if (list.size() != word.length()-numberOfQu(word)) {
+			list = new ArrayList<BoardCell>(); //if complete word cannot be found, an empty ArrayList will be returned
+		}
+		return list;
+	}
+  
+  /**
+   * Helper function that determines the number of Qu instances within a word so as to correct for discrepancies between
+   * the cellsForWord size and length of the word.
+   * 
+   * @param word 
+   * 		is being searched for instances of Qu
+   * 
+   * @return count
+   * 		the number of instances of Qu within the word
+   */
+  private int numberOfQu (String word) {
+	  int count = 0;
+	  for (int n = 0; n < word.length(); n++) {
+		  if (Character.toString(word.charAt(n)).equals("q") || Character.toString(word.charAt(n)).equals("Q")) {
+			  count++; //assuming every instance of q comes with an instance of u, as the game expects us to assume
+		  }
+	  }
+	  return count;
+  }
+  
+  private static boolean numberOfQuWorks() {
+	  WordOnBoardFinder Test = new WordOnBoardFinder();
+	  return 2 == Test.numberOfQu("quickly") + Test.numberOfQu("quotient");
+  }
+
+  /**
+   * Helper function that uses recursion to see if a list of BoardCells can be made for a given word by checking if the
+   * neighbor BoardCell of the most recently added BoardCell corresponds to the next letter of the word being searched
+   * on the board. It searches only as long as the list is not of the correct length yet; when it is, it stops searching
+   * and awaits the final return of the list.
+   * 
+   * @param row
+   * 		current row of the last match found to a letter within the word being searched
+   * 
+   * @param col
+   * 		current column of the last match found to a letter within the word being searched
+   * 
+   * @param board
+   * 		board being searched
+   * 
+   * @param word 
+   * 		word being searched on the board
+   * 
+   * @param toReturn
+   * 		the most updated list so far
+   * 
+   * @param index
+   * 		the index along the letters of the word being searched (first letter is index 0, second letter is index 1, etc.)
+   * 
+   * @param alreadyUsed
+   * 		the most updated array that keeps track of whether a board cell on the board has already been used for the word
+   * 		currently being searched for
+   * 
+   * @return toReturn
+   * 		the empty or full list to be returned by this helper method
+   */
+  private List<BoardCell> cellsForWordHelper(int row, int col, BoggleBoard board, String word, List<BoardCell> toReturn, int index, boolean [][] alreadyUsed) {
+	  alreadyUsed[row][col] = true; 
+	  toReturn.add(new BoardCell(row, col));
+	  if (index == word.length()) { 
+		  return toReturn; //if finished list is of correct length, return it here and now
+	  }
+	  for (int r = 0; r < board.size(); r++) { //these two for-loops look through the entire board for the letters of the word top-to-bottom, left-to-right
+		  for (int c = 0; c < board.size(); c++) {
+			  BoardCell cellToCheck = new BoardCell(r, c);
+			  String faceToCheck = board.getFace(r, c);
+			  if (faceToCheck.equals("Qu") || faceToCheck.equals("qu")) {
+				  if (toReturn.size() < (word.length()-numberOfQu(word))) { //to prevent this helper method from continuing to check after the list is already made and done and the word is waiting for return
+					  if (board.isInBounds(r, c) && toReturn.get(toReturn.size()-1).isNeighbor(cellToCheck) && faceToCheck.equals(Character.toString(word.charAt(index))) && !alreadyUsed[r][c]) {
+						  index = index + 2;
+						  toReturn = cellsForWordHelper(r, c, board, word, toReturn, index, alreadyUsed);
+						  if (toReturn.size() < word.length()-numberOfQu(word)) { //keep searching to make sure that there was not more than just the one checked route for finding the word
+							  List<BoardCell> temp = new ArrayList<BoardCell>();
+							  index = index - 2;
+							  for (int x = 0; x < toReturn.size()-1; x++) { //get back to the state of conditions before this action on the stack was performed and start again
+								  temp.add(toReturn.get(x));
+							  }
+							  alreadyUsed[r][c] = false;
+							  toReturn = temp; 
+							  continue;
+						  }
+					  }
+				  }
+			  }
+			  else {
+				  if (toReturn.size() < (word.length()-numberOfQu(word))) { //to prevent this helper method from continuing to check after the list is already made and done and the word is waiting for return
+					  if (board.isInBounds(r, c) && toReturn.get(toReturn.size()-1).isNeighbor(cellToCheck) && faceToCheck.equals(Character.toString(word.charAt(index))) && !alreadyUsed[r][c]) {
+						  index++;
+						  toReturn = cellsForWordHelper(r, c, board, word, toReturn, index, alreadyUsed);
+						  if (toReturn.size() < word.length()-numberOfQu(word)) { //keep searching to make sure that there was not more than just the one checked route for finding the word
+							  List<BoardCell> temp = new ArrayList<BoardCell>();
+							  index = index - 1;
+							  for (int x = 0; x < toReturn.size()-1; x++) { //get back to the state of conditions before this action on the stack was performed and start again
+								  temp.add(toReturn.get(x));
+							  }
+							  alreadyUsed[r][c] = false;
+							  toReturn = temp; 
+							  continue;
+						  }
+					  }
+				  }
+			  }
+		  }
+	  }
+	  return toReturn;
+  }
+  
+  private static boolean cellsForWordHelperWorks() {
+	// This specifically tests the helper method called within WordOnBoardFinder, using the same board as the last JUnit Test.
+	  // We will start with the case in which the correct first letter "w" has been found and the helper method must now be able
+	  // to find the word wonderful on its own without the cellsForWord method being called again. Note: no q's in this test.
+	  BoardMaker myMaker = new BoardMaker();
+	  WordOnBoardFinder myFinder = new WordOnBoardFinder();
+	  String[] boardContents = { "owonu", "owufu", "nolrf", "dnder", "dderr" };
+	  BoggleBoard board = myMaker.makeBoard(boardContents);
+	  
+	  List<BoardCell> toReturn = new ArrayList<BoardCell>();
+	  boolean [][]  alreadyUsed = new boolean [board.size()][board.size()];
+		for (int row = 0; row < board.size(); row++) {
+			for (int col = 0; col < board.size(); col++) {
+				alreadyUsed [row][col] = false;
+			}
+		}
+  
+	List<BoardCell> list = myFinder.cellsForWordHelper(1, 1, board, "wonderful", toReturn, 1, alreadyUsed);
+	String toCheck = "";
+	 for (int n = 0; n < list.size(); n++) {
+		 toCheck += board.getFace(list.get(n).row, list.get(n).col);
 	 }
+	 return toCheck.equals("wonderful");
+  }
+  
+  public static boolean helpersWork()
+	{
+		if (!WordOnBoardFinder.cellsForWordHelperWorks())
+		{
+			return false;
+		}
+		if (!WordOnBoardFinder.numberOfQuWorks())
+		{
+			return false;
+		}
+
+		return true;
+	}
 }

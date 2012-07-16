@@ -47,12 +47,63 @@ public class WordOnBoardFinderTest extends TestCase {
     BoggleBoard board = myMaker.makeBoard(boardContents);
 
     String[] cornerWords = { "ate", "noted", "net", "urn", "bind", "aside",
-            				"noise", "quack", "armin", "kin", "den", "act", 
-            				"arm", "bin", "eat", "mink" };
+                            "noise", "quack", "armin", "kin", "den", "act", 
+                            "arm", "bin", "eat", "mink" };
     for (String s : cornerWords) {
       List<BoardCell> list = myFinder.cellsForWord(board, s);
       String word = getWord(board, list);
       assertEquals("fail for " + s, s, word);
     }
+  }
+  
+  public void testMultiCase() {
+	  // Mainly to be able to find a word with a specific suffix appended, "peaceful", given the fact it's possible to make 
+	  // the word, "peace", many ways
+	  String[] boardContents = { "abkxb", "apeua", "yeafb", "lrcey", "ufetr" };
+	  BoggleBoard board = myMaker.makeBoard(boardContents);
+
+	  String[] words = { "peace", "peaceful", "baby", "fear", "rye", 
+			  			"fry", "beef", "beer", "creep", "perfect",
+			  			"peer", "free" };
+	  for (String s : words) {
+		  List<BoardCell> list = myFinder.cellsForWord(board, s);
+		  String word = getWord(board, list);
+		  assertEquals("fail for " + s, s, word);
+	  }
+  }
+  
+  public void testOneQuack() {
+	  // There should really only be one word that can be made on this board, "quack", and there are many ways to almost get it,
+	  // so this tests to see if the wordfinder can find the one and only quack correctly (qu is a special case, making it special)
+	  String[] boardContents = { "qacxx", "xxcaq", "qqxxx", "acxck", "caxaq" };
+	  BoggleBoard board = myMaker.makeBoard(boardContents);
+
+	  String[] words = { "quack" };
+	  for (String s : words) {
+		  List<BoardCell> list = myFinder.cellsForWord(board, s);
+		  String word = getWord(board, list);
+		  assertEquals("fail for " + s, s, word);
+	  }
+  }
+  
+  public void testFindWonderful() {
+	  // There are a number of words that can be made from only the repeating letters "w", "o", "n", "d", "e", "r", "f", "u", "l",
+	  // but on the board made below there is only one way to make "wonderful" (and MANY ways to ALMOST make it), so this is also
+	  // a crucial test case
+	  String[] boardContents = { "owonu", "owufu", "nolrf", "dnder", "dderr" };
+	  BoggleBoard board = myMaker.makeBoard(boardContents);
+
+	  String[] words = { "fun", "won", "free", "deer", "red", "nod", "loner",
+			  			"lone", "now", "reed", "need", "leer", "wonderful" };
+	  for (String s : words) {
+		  List<BoardCell> list = myFinder.cellsForWord(board, s);
+		  String word = getWord(board, list);
+		  assertEquals("fail for " + s, s, word);
+	  }
+  }
+  
+  public void testHelpersWork() {
+	 //Test private helper methods cellsForWordHelper and numberOfQu
+	  assertTrue(WordOnBoardFinder.helpersWork());
   }
 }
