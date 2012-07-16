@@ -1,3 +1,4 @@
+package src;
 /**
  * Copyright (C) 2002 Michael Green <mtgreen@cs.ucsd.edu>
  * 
@@ -22,7 +23,6 @@
  * You should have received a copy of the GNU General Public License along with
  * CS boggle. If not, see <http://www.gnu.org/licenses/>.
  */
-package src;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,67 +43,37 @@ public class WordOnBoardFinder {
    *         empty list should be returned if the word cannot be found on the
    *         board
    */
-  public List<BoardCell> cellsForWord(BoggleBoard board, String word) {
-	List<BoardCell> list = new ArrayList<BoardCell>();
-    for (int r = 0; r < board.size(); r++) {
-      for (int c = 0; c < board.size(); c++) {
-		list = new ArrayList<BoardCell>();
-		 findWord(r, c, board, word, new boolean[board.size()][board.size()], 
-		 					list);
-		 int goal;
-		 if (word.matches("qu")) {
-			 goal = word.length() - 1;
-		 } else {
-			 goal = word.length();
-		 }
-		 if (list.size() == goal) {
-			 return list;
-		 }
-      }
-    }
-    return new ArrayList<BoardCell>();
-  }
-
-	/**
-	 * Populates the ArrayList with the matching words found.
-	 */
- private static void findWord(int row, int column, BoggleBoard board, 
- 								String word, boolean[][] used, List<BoardCell> list) {
-		if (word != "") {
-			String firstLetter = word.substring(0, 1);
-			if (board.getFace(row, column).equals(firstLetter)) {
-				used[row][column] = true;
-				list.add(new BoardCell(row, column));
-				String next;
-				if (firstLetter.equalsIgnoreCase("q")) {
-					next = word.substring(2);	
-				} else {
-					next = word.substring(1);
+	public List<BoardCell> cellsForWord(BoggleBoard board, String word) {
+		List<BoardCell> list = new ArrayList<BoardCell>();
+		for (int r = 0; r < board.size(); r++) {
+			for (int c = 0; c < board.size(); c++) {
+				if (board.getFace(r, c).equals(Character.toString(word.charAt(0))) && !Character.toString(word.charAt(0)).equals("q")){ //if a first letter match is found for a word that does not begin with Qu
+					int index = 1; //placekeeper for index along the word; index at 0 was just checked so we start at 1
+					boolean [][]  alreadyUsed = new boolean [board.size()][board.size()];
+					for (int row = 0; row < board.size(); row++) {
+						for (int col = 0; col < board.size(); col++) {
+							alreadyUsed [row][col] = false; //array to keep track of which cells have already been used for; new one for each time a new search begins
+						}
+					}
+					list = cellsForWordHelper(r, c, board, word, list, index, alreadyUsed);
+					if (list.size() == (word.length()-numberOfQu(word))) {
+						return list; //if finished list is of correct length, return it here and now so the next iteration cannot throw it off
+					}
+					list = new ArrayList<BoardCell>(); //if on this first run through complete word cannot be found, list is reset
 				}
-				if (row > 0 && !used[row - 1][column]) {
-					findWord(row - 1, column, board, next, used, list);
-				}
-				if (row < board.size() && !used[row + 1][column]) {
-					findWord(row + 1, column, board, next, used, list);
-				}
-				if (column > 0 && !used[row][column - 1]) {
-					findWord(row, column - 1, board, next, used, list);
-				}
-				if (column < board.size() && !used[row][column + 1]) {
-					findWord(row, column + 1, board, next, used, list);
-				}
-				if (column > 0 && row > 0 && !used[row - 1][column - 1]) {
-					findWord(row - 1, column - 1, board, next, used, list);
-				}
-				if (column < board.size() && row > 0 && !used[row - 1][column + 1]) {
-					findWord(row - 1, column + 1, board, next, used, list);
-				}
-				if (column > 0 && row < board.size() && !used[row + 1][column - 1])	{
-					findWord(row + 1, column - 1, board, next, used, list);
-				}
-				if (column < board.size() && row < board.size()
-									&& !used[row + 1][column + 1]) {
-					findWord(row + 1, column + 1, board, next, used, list);
+				else if (board.getFace(r, c).equals(Character.toString(word.charAt(0))+Character.toString(word.charAt(1))) && Character.toString(word.charAt(0)).equals("q")){ //if a first letter match is found for a word beginning with Qu
+					int index = 2; //placekeeper for index along the word; index at 0 was just checked so we start at 1
+					boolean [][]  alreadyUsed = new boolean [board.size()][board.size()];
+					for (int row = 0; row < board.size(); row++) {
+						for (int col = 0; col < board.size(); col++) {
+							alreadyUsed [row][col] = false; //array to keep track of which cells have already been used for; new one for each time a new search begins
+						}
+					}
+					list = cellsForWordHelper(r, c, board, word, list, index, alreadyUsed);
+					if (list.size() == (word.length()-numberOfQu(word))) {
+						return list; //if finished list is of correct length, return it here and now so the next iteration cannot throw it off
+					}
+					list = new ArrayList<BoardCell>(); //if on this first run through complete word cannot be found, list is reset
 				}
 			}
 		}
