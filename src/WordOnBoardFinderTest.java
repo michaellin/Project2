@@ -45,6 +45,12 @@ public class WordOnBoardFinderTest extends TestCase {
     // This is how you can create a test board:
     String[] boardContents = { "atruq", "seana", "niotc", "bdenk", "armin" };
     BoggleBoard board = myMaker.makeBoard(boardContents);
+    for (int i = 0 ; i<board.size() ; i++) {
+    	for (int e = 0 ; e<board.size() ; e++) {
+    		System.out.print(board.getFace(i,e));
+    	}
+    	System.out.print("\n");
+    }
 
     String[] cornerWords = { "ate", "noted", "net", "urn", "bind", "aside",
             				"noise", "quack", "armin", "kin", "den", "act", 
@@ -52,6 +58,8 @@ public class WordOnBoardFinderTest extends TestCase {
     for (String s : cornerWords) {
       List<BoardCell> list = myFinder.cellsForWord(board, s);
       String word = getWord(board, list);
+      System.out.println("s is " + s);
+      System.out.println("word is " + word);
       assertEquals("fail for " + s, s, word);
     }
   }
