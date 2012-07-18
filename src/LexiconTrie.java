@@ -25,10 +25,11 @@ package src;
  */
 
 import java.util.Scanner;
+import java.util.HashMap;
 
 public class LexiconTrie implements LexiconInterface {
 	
-	private HashMap< >myRoot;
+	private HashMap<Integer, Integer>myRoot;
 	
 	/**
 	 * Load the words from an input source and store them in this lexicon.
