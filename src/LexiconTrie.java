@@ -27,6 +27,9 @@ package src;
 import java.util.Scanner;
 
 public class LexiconTrie implements LexiconInterface {
+	
+	private HashMap< >myRoot;
+	
 	/**
 	 * Load the words from an input source and store them in this lexicon.
 	 * 
@@ -45,6 +48,7 @@ public class LexiconTrie implements LexiconInterface {
        */
         }
     }
+    
     
     /**
      * If the prefix is in the lexicon, returns true.
