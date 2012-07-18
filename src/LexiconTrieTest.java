@@ -21,7 +21,7 @@ public class LexiconTrieTest extends TestCase {
    */
   public void setUp() {
     try {
-      words = new Scanner(new File("src/smalltestwords.txt"));
+      words = new Scanner(new File("smalltestwords.txt"));
     } catch (FileNotFoundException e) {
       System.out.println(e);
       assertTrue(false);
