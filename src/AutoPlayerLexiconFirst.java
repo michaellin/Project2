@@ -23,6 +23,7 @@ package src;
  * You should have received a copy of the GNU General Public License along with
  * CS boggle. If not, see <http://www.gnu.org/licenses/>.
  */
+import java.util.List;
 
 public class AutoPlayerLexiconFirst extends AbstractPlayer {
   
@@ -41,12 +42,29 @@ public class AutoPlayerLexiconFirst extends AbstractPlayer {
    * @param minLength
    *          of words found by an autoplayer
    */
-  public void findAllValidWords(BoggleBoard board, LexiconInterface lex,
-                                int minLength) {
-    /* TODO: Given a board and a lexicon, use the add() in AbstractPlayer.java
-     * to add all words that are both in the board and in the lexicon.
-     * 
-     * This method will run after the human player finishes entering words. */
+  public void findAllValidWords(BoggleBoard board, LexiconInterface lex, int minLength) {
+	  if (lex instanceof LexiconArrayList) {
+		  LexiconArrayList lexAL = (LexiconArrayList) lex;
+		  WordOnBoardFinder myFinder = new WordOnBoardFinder();
+		  for (int n = 0; n < lexAL.size(); n++) {
+			  List<BoardCell> boardCellList = myFinder.cellsForWord(board, lexAL.get(n));
+			  if (!boardCellList.isEmpty() && lexAL.get(n).length() >= minLength) {
+				  this.add(lexAL.get(n));
+			  }
+		  }
+	  }
+	  else {
+		  LexiconTrie LexT = (LexiconTrie) lex;
+		  WordOnBoardFinder myFinder = new WordOnBoardFinder();
+		  LexT.initIterator();
+		  while (LexT.hasNext()) {
+			  String currentWord = LexT.next();
+			  List<BoardCell> boardCellList = myFinder.cellsForWord(board, currentWord);
+			  if (!boardCellList.isEmpty() && currentWord.length() >= minLength) {
+				  this.add(currentWord);
+			  }
+		  }
+	  }
   }
   
   @Override
