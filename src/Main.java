@@ -14,6 +14,7 @@ class Main {
         	e.printStackTrace();
         }
         test.load(sc);
+        System.out.println("---------------------");
         System.out.print("for gorilla ");
         System.out.println(test.contains("gorilla"));
         System.out.print("for a ");
@@ -22,7 +23,7 @@ class Main {
         System.out.println(test.contains("big"));
         System.out.print("for duck ");
         System.out.println(test.contains("duck"));
-        System.out.print("for ducc ");
-        System.out.println(test.contains("ducc"));
+        System.out.print("for ducks ");
+        System.out.println(test.contains("ducks"));
     }
 }

@@ -26,7 +26,6 @@ package src;
 
 import java.util.Scanner;
 import java.util.HashMap;
-import java.io.File;
 
 public class LexiconTrie implements LexiconInterface {
 	
@@ -54,7 +53,7 @@ public class LexiconTrie implements LexiconInterface {
 	 */
 	public void add (String word) {
         if (!word.equals("")) {
-		addHelper(word, this.myRoot, 1);
+            addHelper(word, this.myRoot, 1);
         } else {
             throw new IllegalArgumentException("Can\'t store empty string");
         }
@@ -67,7 +66,7 @@ public class LexiconTrie implements LexiconInterface {
 	private static void addHelper(String word, TrieNode node, int level) {
 		String prefix = word.substring(0, level); 
 		if (!word.equals(prefix)) {
-			if (!node.containsWord(prefix)) {
+			if (!node.containsPrefix(prefix)) {
 				node.put(prefix);
 			}
 			addHelper(word, node.get(prefix), level + 1);
