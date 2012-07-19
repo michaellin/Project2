@@ -60,7 +60,7 @@ public class WordOnBoardFinderTest extends TestCase {
       String word = getWord(board, list);
       System.out.println("s is " + s);
       System.out.println("word is " + word);
-      assertEquals("fail for " + s, s, word);
+	  assertEquals("fail for " + s, s, word);
     }
   }
   

@@ -43,103 +43,94 @@ public class WordOnBoardFinder {
    *         empty list should be returned if the word cannot be found on the
    *         board
    */
-  public List<BoardCell> cellsForWord(BoggleBoard board, String word) {
-	List<BoardCell> list = new ArrayList<BoardCell>();
-    for (int r = 0; r < board.size(); r++) {
-      for (int c = 0; c < board.size(); c++) {
-		list = new ArrayList<BoardCell>();
-		 findWord(r, c, board, word, word.length(), new boolean[board.size()][board.size()], 
-		 					list);
-		 int goal;
-		 if (word.matches("(.*?)[Qq]u.*")) {
-			 goal = word.length() - 1;
-		 } else {
-			 goal = word.length();
-		 }
-		 /*
-		 String test = "";
-		 for (BoardCell cell : list) {
-			 test += board.getFace(cell.row, cell.col);
-		 }
-		 System.out.println(test);
-		 */
-		 if (list.size() == goal) {
-			 return list;
-		 }
-      }
-    }
-    return new ArrayList<BoardCell>();
-  }
-
-	/**
-	 * Populates the ArrayList with the matching letters found.
-	 */
- private static boolean findWord(int row, int column, BoggleBoard board, 
- 								String word, int goalLength, boolean[][] used, List<BoardCell> list) {
-		if (!word.equals("") && list.size() != goalLength) {
-			System.out.print(word + " ");
-			System.out.println("row " + row + " col " + column);
-			String firstLetter = word.substring(0, 1);
-			if (firstLetter.equalsIgnoreCase("q")) {
-				firstLetter += word.substring(1, 2);
-			}
-			if (board.getFace(row, column).equals(firstLetter)) {
-                boolean toRtn = true;
-				boolean[][] newUsed = (boolean[][]) used.clone();
-				newUsed[row][column] = true;
-				list.add(new BoardCell(row, column));
-				String next;
-				if (firstLetter.equalsIgnoreCase("qu")) {
-					next = word.substring(2);	
-				} else {
-					next = word.substring(1);
-				}
-				if (row > 0 && !used[row - 1][column]) {
-					toRtn = toRtn || findWord(row - 1, column, board, next,
-                                              goalLength, newUsed, list);
-				}
-				if (column < board.size() - 1 && row > 0 &&
-                        				  	 !used[row - 1][column + 1]) {
-					toRtn = toRtn || findWord(row - 1, column + 1, board, next, 
-                                              goalLength, newUsed, list);
-				}
-                if (column < board.size() - 1 && !used[row][column + 1]) {
-                    toRtn = toRtn || findWord(row, column + 1, board, next, goalLength,
-                                              newUsed, list); 
-                }
-                if (column < board.size() - 1 && row < board.size() - 1
-                                          && !used[row + 1][column + 1]) {
-                   toRtn = toRtn || findWord(row + 1, column + 1, board, next, 
-                                            goalLength, newUsed, list);
-                }
-                if (row < board.size() - 1 && !used[row + 1][column]) {
-                   toRtn = toRtn || findWord(row + 1, column, board, next, goalLength,
-                                    newUsed, list) ;
-                }
-                if (column > 0 && row < board.size() - 1 && 
-                                            !used[row + 1][column - 1])	{
-                   toRtn = toRtn || findWord(row + 1, column - 1, board, next,
-                                             goalLength, newUsed, list);
-                }
-                if (column > 0 && !used[row][column - 1]) {
-                   toRtn = toRtn || findWord(row, column - 1, board, next,
-                                             goalLength, newUsed, list);
-                }
-                if (column > 0 && row > 0 && !used[row - 1][column - 1]) {
-                   toRtn = toRtn || findWord(row - 1, column - 1, board, next,
-                                             goalLength, newUsed, list);
-                }
-                if (!toRtn) {
-                    list.remove(list.size() - 1);
-                }
-                return toRtn;
-			} else {
-                return false;
-            }
-		} else {
-            return true;
+	
+	public List<BoardCell> cellsForWord(BoggleBoard board, String word) {
+		List<BoardCell> list = new ArrayList<BoardCell>();
+		ArrayList<List<BoardCell>> listOfPaths = new ArrayList<List<BoardCell>>();
+		int wordLength = word.length();
+		if(word.contains("qu")){
+			wordLength -=1; 
 		}
- 	}
+	    for (int r = 0; r < board.size(); r++) {
+	      for (int c = 0; c < board.size(); c++) {
+			list = new ArrayList<BoardCell>();
+			 findWord(r, c, board, word, wordLength, new boolean[board.size()][board.size()], 
+			 					list, listOfPaths);
+	      }
+	    }
+		if(listOfPaths.isEmpty()){
+			System.out.println("empty");
+			return new ArrayList<BoardCell>();
+		}else{
+			for(int i = 0; i < listOfPaths.get(0).size(); i++){
+			}
+			return listOfPaths.get(0);
+		}
+	  }
+
+		/**
+		 * Populates the ArrayList with the matching letters found.
+		 */
+	 private static void findWord(int row, int column, BoggleBoard board, 
+	 								String word, int goalLength, boolean[][] used, List<BoardCell> list, ArrayList <List<BoardCell>> listOfPaths) {
+		 System.out.println();
+		 for(int i = 0; i < list.size(); i++){
+				System.out.print(board.getFace(list.get(i).row, (list.get(i)).col));
+				System.out.print(list.get(i).row + ", " + list.get(i).col + "; ");
+		 }
+		 System.out.print(" " + row + " " + column + " " + used[row][column]+ " " + (list.size()==goalLength) + " " + word + " " + board.getFace(row, column));
+		 if(word.equals("")&&list.size()==goalLength){
+		 		listOfPaths.add(list);
+		 	}
+		 	else if (!word.equals("") && list.size() != goalLength) {
+				//System.out.println(word);
+				//System.out.print("row " + row + " col " + column);
+				String firstLetter = word.substring(0, 1);
+				System.out.print(board.getFace(row, column).equals(firstLetter) + " " + (row > 0 && !used[row - 1][column]));
+				if (firstLetter.equalsIgnoreCase("q")) {
+					firstLetter += word.substring(1, 2);
+				}
+				if (board.getFace(row, column).equals(firstLetter)) {
+					//System.out.print(firstLetter);
+					boolean[][] newUsed = (boolean[][]) used.clone();
+					newUsed[row][column] = true;
+					list.add(new BoardCell(row, column));
+					String next;
+					if (firstLetter.equalsIgnoreCase("qu")) {
+						next = word.substring(2);	
+					} else {
+						next = word.substring(1);
+					}
+					if (row > 0 && !used[row - 1][column]) {
+						findWord(row - 1, column, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}
+					if (column < board.size() - 1 && row > 0 && !used[row - 1][column + 1]) {
+						findWord(row - 1, column + 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}
+					if (column < board.size() - 1 && !used[row][column + 1]) {
+						findWord(row, column + 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}
+					if (column < board.size() - 1 && row < board.size() - 1
+					                          		&& !used[row + 1][column + 1]) {
+						findWord(row + 1, column + 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}	
+					if (row < board.size() - 1 && !used[row + 1][column]) {
+						findWord(row + 1, column, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}
+					if (column > 0 && row < board.size() - 1 && !used[row + 1][column - 1])	{
+						findWord(row + 1, column - 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}
+					if (column > 0 && !used[row][column - 1]) {
+						findWord(row, column - 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}
+					if (column > 0 && row > 0 && !used[row - 1][column - 1]) {
+						findWord(row - 1, column - 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}else if(next.equals("")){
+						findWord(row, column, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+					}
+				}
+			}
+	 	}
   
   private static boolean findWordWorks() {
 	// This specifically tests the helper method called within WordOnBoardFinder, using the same board as the last JUnit Test.
@@ -149,12 +140,13 @@ public class WordOnBoardFinder {
 	String[] boardContents = { "owonu", "owufu", "nolrf", "dnder", "dderr" };
 	BoggleBoard board = myMaker.makeBoard(boardContents);
 	List<BoardCell> toReturn = new ArrayList<BoardCell>();
+	ArrayList<List<BoardCell>> listOfPaths = new ArrayList<List<BoardCell>> ();
 	boolean [][]  alreadyUsed = new boolean [board.size()][board.size()];
 	for (int row = 0; row < board.size(); row++) {
 		for (int col = 0; col < board.size(); col++) {
 			alreadyUsed [row][col] = false;
 			findWord(row, col, board, "wonderful", "wonderful".length(), new boolean[board.size()][board.size()], 
-					toReturn);
+					toReturn, listOfPaths);
 			}	
 		}	
 	String toCheck = "";
