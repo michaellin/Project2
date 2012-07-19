@@ -76,16 +76,15 @@ public class WordOnBoardFinder {
 	 */
  private static boolean findWord(int row, int column, BoggleBoard board, 
  								String word, int goalLength, boolean[][] used, List<BoardCell> list) {
-        boolean toRtn = false;
 		if (!word.equals("") && list.size() != goalLength) {
-			System.out.println(word);
-			System.out.print("row " + row + " col " + column);
+			System.out.print(word + " ");
+			System.out.println("row " + row + " col " + column);
 			String firstLetter = word.substring(0, 1);
 			if (firstLetter.equalsIgnoreCase("q")) {
 				firstLetter += word.substring(1, 2);
 			}
 			if (board.getFace(row, column).equals(firstLetter)) {
-                toRtn = true;
+                boolean toRtn = true;
 				boolean[][] newUsed = (boolean[][]) used.clone();
 				newUsed[row][column] = true;
 				list.add(new BoardCell(row, column));
@@ -95,41 +94,45 @@ public class WordOnBoardFinder {
 				} else {
 					next = word.substring(1);
 				}
-				boolean one, two, three, four;
-				one = two = three = four = false;
-                one = (row > 0 && !used[row - 1][column]) ?
-                                findWord(row - 1, column, board, next,
-                                goalLength, newUsed, list) : false;
-				if (!one) {
-                    two = (column < board.size() - 1 && row > 0 &&
-                                    !used[row - 1][column + 1]) ? findWord(row 
-                                    - 1, column + 1, board, next, goalLength,
-                                    newUsed, list) : false;
-                } else if (!two) {
-                    three = (column < board.size() - 1 && !used[row][column + 1]) ?
-                                    findWord(row, column + 1, board, next, goalLength,
-                                    newUsed, list) : false;
-                } else if (!three) {
-                    four = (column < board.size() - 1 && row < board.size() - 1
-                                    && !used[row + 1][column + 1]) ? findWord(row + 1, 
-                                    column + 1, board, next, goalLength,
-                                    newUsed, list) : false;
-                } else if(!four) {
+				if (row > 0 && !used[row - 1][column]) {
+					toRtn = toRtn || findWord(row - 1, column, board, next,
+                                              goalLength, newUsed, list);
+				}
+				if (column < board.size() - 1 && row > 0 &&
+                        				  	 !used[row - 1][column + 1]) {
+					toRtn = toRtn || findWord(row - 1, column + 1, board, next, 
+                                              goalLength, newUsed, list);
+				}
+                if (column < board.size() - 1 && !used[row][column + 1]) {
+                    toRtn = toRtn || findWord(row, column + 1, board, next, goalLength,
+                                              newUsed, list); 
                 }
-
-				if (row < board.size() - 1 && !used[row + 1][column]) {
-					findWord(row + 1, column, board, next, goalLength, newUsed, list);
-				}
-				if (column > 0 && row < board.size() - 1 && !used[row + 1][column - 1])	{
-					findWord(row + 1, column - 1, board, next, goalLength, newUsed, list);
-				}
-				if (column > 0 && !used[row][column - 1]) {
-					findWord(row, column - 1, board, next, goalLength, newUsed, list);
-				}
-				if (column > 0 && row > 0 && !used[row - 1][column - 1]) {
-					findWord(row - 1, column - 1, board, next, goalLength, newUsed, list);
-				}
-				return one;//TODO remove
+                if (column < board.size() - 1 && row < board.size() - 1
+                                          && !used[row + 1][column + 1]) {
+                   toRtn = toRtn || findWord(row + 1, column + 1, board, next, 
+                                            goalLength, newUsed, list);
+                }
+                if (row < board.size() - 1 && !used[row + 1][column]) {
+                   toRtn = toRtn || findWord(row + 1, column, board, next, goalLength,
+                                    newUsed, list) ;
+                }
+                if (column > 0 && row < board.size() - 1 && 
+                                            !used[row + 1][column - 1])	{
+                   toRtn = toRtn || findWord(row + 1, column - 1, board, next,
+                                             goalLength, newUsed, list);
+                }
+                if (column > 0 && !used[row][column - 1]) {
+                   toRtn = toRtn || findWord(row, column - 1, board, next,
+                                             goalLength, newUsed, list);
+                }
+                if (column > 0 && row > 0 && !used[row - 1][column - 1]) {
+                   toRtn = toRtn || findWord(row - 1, column - 1, board, next,
+                                             goalLength, newUsed, list);
+                }
+                if (!toRtn) {
+                    list.remove(list.size() - 1);
+                }
+                return toRtn;
 			} else {
                 return false;
             }

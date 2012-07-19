@@ -178,25 +178,5 @@ public class LexiconTrie implements LexiconInterface {
         public void putInDic(String word) {
             inDic.put(word, true);
         }
-
-        @Deprecated
-        /**
-         * Hopefully this one will be used for the 
-         * containsKey in the contains()
-         */
-        public boolean equals(String otherWord) {
-            return false;
-        }
-
-        @Deprecated
-        public boolean equals(Object o) {
-            TrieNode node;
-            try {
-                node = (TrieNode) o;
-            } catch (Exception e) {
-                return false;
-            }
-            return false;
-        }
     }
 }

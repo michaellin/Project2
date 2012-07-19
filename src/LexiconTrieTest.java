@@ -15,6 +15,7 @@ public class LexiconTrieTest extends TestCase {
    */
   private Scanner smallWords;
   private Scanner bigWords;
+  LexiconTrie l;
 
   /**
    * Open smalltestwords.txt and give to the words instance variable. This is
@@ -28,6 +29,8 @@ public class LexiconTrieTest extends TestCase {
       System.out.println(e);
       assertTrue(false);
     }
+    l = new LexiconTrie();
+    l.load(bigWords);
   }
 
   /**
@@ -54,15 +57,18 @@ public class LexiconTrieTest extends TestCase {
     assertTrue(l.contains("gorilla"));
     assertFalse(l.contains("armin"));
   }
-  
+
+  @Deprecated
   /**
    * A big data set test for the lexicon. 
    */
   public void testBigLexicon() {
-    LexiconTrie l = new LexiconTrie();
-    l.load(bigWords);
-    //assertTrue(l.contains("agate"));
-    assertTrue(l.contains("civil"));
-    assertFalse(l.contains("agitatet"));
+    //l.load(bigWords);
   }
+  
+  public void testBigLexiconSpeed() {
+  	assertTrue(l.contains("civil"));
+  	assertFalse(l.contains("agitatet"));
+  }
+  
 }
