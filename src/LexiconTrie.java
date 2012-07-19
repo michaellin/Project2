@@ -43,6 +43,10 @@ public class LexiconTrie implements LexiconInterface {
 	public LexiconTrie() {
 		myRoot = new TrieNode();
 	}
+	
+	public String toString() {
+		return myRoot.toString();
+	}
 
 	/**
 	 * Add the word and all its prefixes in different levels of
@@ -68,6 +72,7 @@ public class LexiconTrie implements LexiconInterface {
 			}
 			addHelper(word, node.get(prefix), level + 1);
 		} else {
+			node.put(prefix);
             node.putInDic(word);
 		}
 	}
@@ -95,8 +100,8 @@ public class LexiconTrie implements LexiconInterface {
     private static boolean containsHelper(String s, TrieNode node, int level) {
 		String prefix = s.substring(0, level); 
 		if (!s.equals(prefix)) {
-			if (!node.containsPrefix(prefix)) {
-                return containsHelper(prefix, node.get(prefix), level + 1);
+			if (node.containsPrefix(prefix)) {
+                return containsHelper(s, node.get(prefix), level + 1);
 			} else {
                 return false;
             }
@@ -140,6 +145,10 @@ public class LexiconTrie implements LexiconInterface {
         public TrieNode() {
             inDic = new HashMap<String, Boolean> ();
             subTrie = new HashMap<String, TrieNode> (); 
+        }
+        
+        public String toString() {
+        	return subTrie.toString();
         }
 
         /**

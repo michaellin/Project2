@@ -16,5 +16,13 @@ class Main {
         test.load(sc);
         System.out.print("for gorilla ");
         System.out.println(test.contains("gorilla"));
+        System.out.print("for a ");
+        System.out.println(test.contains("a"));
+        System.out.print("for big ");
+        System.out.println(test.contains("big"));
+        System.out.print("for duck ");
+        System.out.println(test.contains("duck"));
+        System.out.print("for ducc ");
+        System.out.println(test.contains("ducc"));
     }
 }
