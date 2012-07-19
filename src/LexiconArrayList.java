@@ -218,4 +218,17 @@ public class LexiconArrayList implements LexiconInterface {
 		return false;
 	}
 
+	/**
+	 * Method for getting the size of the lexicon.
+	 */ 
+	public int size() {
+		return LexiconArrayList.size();
+	}
+	
+	/**
+	 * Method for finding an element inside the lexicon.
+	 */
+	public String get(int n) {
+		return LexiconArrayList.get(n);
+	}
 }
