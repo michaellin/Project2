@@ -66,7 +66,7 @@ public class LexiconTrie implements LexiconInterface {
 			if (!node.containsWord(prefix)) {
 				node.put(prefix);
 			}
-			addHelper(prefix, node.get(prefix), level + 1);
+			addHelper(word, node.get(prefix), level + 1);
 		} else {
             node.putInDic(word);
 		}
