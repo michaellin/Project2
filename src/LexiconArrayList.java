@@ -122,6 +122,9 @@ public class LexiconArrayList implements LexiconInterface {
 	 * @param indexLow
 	 * 			The lowerbound of strings to look through in the lexicon
 	 * 
+	 * @param indexMid
+	 * 			The middle of the interval of strings to look through in the lexicon
+	 * 
 	 * @param indexHigh
 	 * 			The upperbound of strings to look through in the lexicon
 	 * 
