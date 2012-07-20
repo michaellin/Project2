@@ -62,9 +62,9 @@ public class LexiconTrieTest extends TestCase {
   /**
    * A big data set test for the lexicon. 
    */
-  public void testBigLexicon() {
+  //public void testBigLexicon() {
     //l.load(bigWords);
-  }
+  //}
   
   public void testBigLexiconSpeed() {
   	assertTrue(l.contains("civil"));

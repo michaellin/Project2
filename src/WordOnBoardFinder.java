@@ -92,31 +92,31 @@ public class WordOnBoardFinder {
 						next = word.substring(1);
 					}
 					if (row > 0 && !used[row - 1][column]) {
-						findWord(row - 1, column, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row - 1, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}
 					if (column < board.size() - 1 && row > 0 && !used[row - 1][column + 1]) {
-						findWord(row - 1, column + 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row - 1, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}
 					if (column < board.size() - 1 && !used[row][column + 1]) {
-						findWord(row, column + 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}
 					if (column < board.size() - 1 && row < board.size() - 1
 					                          		&& !used[row + 1][column + 1]) {
-						findWord(row + 1, column + 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row + 1, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}	
 					if (row < board.size() - 1 && !used[row + 1][column]) {
-						findWord(row + 1, column, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row + 1, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}
 					if (column > 0 && row < board.size() - 1 && !used[row + 1][column - 1])	{
-						findWord(row + 1, column - 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row + 1, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}
 					if (column > 0 && !used[row][column - 1]) {
-						findWord(row, column - 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}
 					if (column > 0 && row > 0 && !used[row - 1][column - 1]) {
-						findWord(row - 1, column - 1, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row - 1, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}else if(next.equals("")){
-						findWord(row, column, board, next, goalLength, newUsed, new ArrayList(list), listOfPaths);
+						findWord(row, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 					}
 				}
 			}
