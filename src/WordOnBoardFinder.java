@@ -59,7 +59,6 @@ public class WordOnBoardFinder {
 	      }
 	    }
 		if(listOfPaths.isEmpty()){
-			System.out.println("empty");
 			return new ArrayList<BoardCell>();
 		}else{
 			for(int i = 0; i < listOfPaths.get(0).size(); i++){
@@ -72,26 +71,17 @@ public class WordOnBoardFinder {
 		 * Populates the ArrayList with the matching letters found.
 		 */
 	 private static void findWord(int row, int column, BoggleBoard board, 
-	 								String word, int goalLength, boolean[][] used, List<BoardCell> list, ArrayList <List<BoardCell>> listOfPaths) {
-		 System.out.println();
-		 for(int i = 0; i < list.size(); i++){
-				System.out.print(board.getFace(list.get(i).row, (list.get(i)).col));
-				System.out.print(list.get(i).row + ", " + list.get(i).col + "; ");
-		 }
-		 System.out.print(" " + row + " " + column + " " + used[row][column]+ " " + (list.size()==goalLength) + " " + word + " " + board.getFace(row, column));
+	 								String word, int goalLength, boolean[][] used,
+	 								List<BoardCell> list, ArrayList <List<BoardCell>> listOfPaths) {
 		 if(word.equals("")&&list.size()==goalLength){
 		 		listOfPaths.add(list);
 		 	}
 		 	else if (!word.equals("") && list.size() != goalLength) {
-				//System.out.println(word);
-				//System.out.print("row " + row + " col " + column);
 				String firstLetter = word.substring(0, 1);
-				System.out.print(board.getFace(row, column).equals(firstLetter) + " " + (row > 0 && !used[row - 1][column]));
 				if (firstLetter.equalsIgnoreCase("q")) {
 					firstLetter += word.substring(1, 2);
 				}
 				if (board.getFace(row, column).equals(firstLetter)) {
-					//System.out.print(firstLetter);
 					boolean[][] newUsed = (boolean[][]) used.clone();
 					newUsed[row][column] = true;
 					list.add(new BoardCell(row, column));

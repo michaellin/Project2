@@ -35,10 +35,10 @@ import java.io.InputStream;
 public class Boggle {
   
   public static void main(String[] args) {
-    LexiconInterface lexicon = new LexiconTrie();
+    LexiconInterface lexicon = new LexiconArrayList();
     WordOnBoardFinder finder = new WordOnBoardFinder();
     
-    InputStream is = lexicon.getClass().getResourceAsStream("/ospd3.txt");
+    InputStream is = lexicon.getClass().getResourceAsStream("/bogwords.txt");
     AutoPlayerLexiconFirst compPlayer = new AutoPlayerLexiconFirst(lexicon);
     BoggleGUI bgui = new BoggleGUI(lexicon, finder, is, compPlayer);
   }
