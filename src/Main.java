@@ -6,7 +6,8 @@ import java.io.File;
 class Main {
     public static void main(String[] args) {
         LexiconTrie test = new LexiconTrie();
-        File wordList = new File("smalltestwords.txt");
+        File wordList = new File("bogwords.txt");
+        Timer t = new Timer();
         Scanner sc = null;
         try {
         	sc = new Scanner(wordList);
@@ -14,16 +15,8 @@ class Main {
         	e.printStackTrace();
         }
         test.load(sc);
-        System.out.println("---------------------");
-        System.out.print("for gorilla ");
-        System.out.println(test.contains("gorilla"));
-        System.out.print("for a ");
-        System.out.println(test.contains("a"));
-        System.out.print("for big ");
-        System.out.println(test.contains("big"));
-        System.out.print("for duck ");
-        System.out.println(test.contains("duck"));
-        System.out.print("for ducks ");
-        System.out.println(test.contains("ducks"));
+        t.start();
+        test.contains("civil");
+        System.out.println(t.stop());
     }
 }
