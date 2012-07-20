@@ -107,86 +107,42 @@ public class LexiconArrayList implements LexiconInterface {
 	 * @return True if the lexicon contains s.
 	 */
 	public boolean containsPrefix(String s) {
-		/*if (!LexiconArrayList.isEmpty() && s.length() >= 3) {
-			return containsPrefixHelper(s, 1, LexiconArrayList.size()/2, LexiconArrayList.size()-2);
+		if (!LexiconArrayList.isEmpty()) {
+			return containsPrefixHelper(s, 0, LexiconArrayList.size()/2, LexiconArrayList.size()-1);
 		}
-		return false;*/
-		
-		/*binary search then check the next largest one to see if it contains prefix, otherwise return false
-		 * 
-		 */
-		containsPrefixHelper(s, 0, LexiconArrayList.size()-1);
+		return false;
 	}
 	
-	private boolean containsPrefixHelper(String s, int indexLow, int indexHigh){
-		int indexMid = (indexLow + indexHigh)/2;
-		if(indexLow == indexHigh - 1){
-			return LexiconArrayList.get(indexHigh).contains(s);
-		}else if(s.compareTo(LexiconArrayList.get(indexLow)) < 0 || s.compareTo(LexiconArrayList.get(indexHigh))>0){
-			return false;
-		}else if(s.compareTo(LexiconArrayList.get(indexMid))> 0 && s.compareTo(LexiconArrayList.get(indexHigh)) < 0){
-			return containsPrefixHelper(s, indexMid, indexHigh);
-		}else if(s.compareTo(LexiconArrayList.get(indexMid))< 0 && s.compareTo(LexiconArrayList.get(indexLow)) > 0){
-			return containsPrefixHelper(s, indexLow, indexMid);
-		}else if(s.compareTo(LexiconArrayList.get(indexMid))== 0){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
 	/**
-	 * Recursive helper method which executes a modified binary search in order to see if the potential prefix is within the lexicon.
-	 * In order to qualify as an actual prefix, this potential prefix must be a prefix to at least two words already in the lexicon.
+	 * Recursive helper method which executes a modified binary search in order to see if a prefix is within the lexicon.
 	 * 
 	 * @param s
-	 *          The potential prefix to search for.
+	 *          The prefix to search for.
 	 *          
 	 * @param indexLow
 	 * 			The lowerbound of strings to look through in the lexicon
-	 * 
-	 * @param indexMid
-	 * 			The middle index of strings to look through in the lexicon
 	 * 
 	 * @param indexHigh
 	 * 			The upperbound of strings to look through in the lexicon
 	 * 
 	 * @return True if the lexicon contains s.
 	 */
-	/*private boolean containsPrefixHelper(String s, int indexLow, int indexMid, int indexHigh) {
-		String toCheckLowL = LexiconArrayList.get(indexLow-1);
-		String toCheckLow = LexiconArrayList.get(indexLow);
-		String toCheckLowH= LexiconArrayList.get(indexLow+1);
-		String toCheckMidL = LexiconArrayList.get(indexMid-1);
-		String toCheckMid = LexiconArrayList.get(indexMid);
-		String toCheckMidH = LexiconArrayList.get(indexMid+1);
-		String toCheckHighL = LexiconArrayList.get(indexHigh-1);
-		String toCheckHigh = LexiconArrayList.get(indexHigh);
-		String toCheckHighH = LexiconArrayList.get(indexHigh+1);
-		if ((s.compareTo(toCheckLowL) < 0) || (s.compareTo(toCheckHighH)) > 0) {
+	private boolean containsPrefixHelper(String s, int indexLow, int indexMid, int indexHigh){
+		if(s.compareTo(LexiconArrayList.get(indexLow)) < 0 || s.compareTo(LexiconArrayList.get(indexHigh)) > 0){
 			return false;
-		}
-		else if (((toCheckLowL.startsWith(s)) && (toCheckLow.startsWith(s)))
-				|| ((toCheckLow.startsWith(s)) && (toCheckLowH.startsWith(s)))
-				|| ((toCheckMidL.startsWith(s)) && (toCheckMid.startsWith(s)))
-				|| ((toCheckMid.startsWith(s)) && (toCheckMidH.startsWith(s)))
-				|| ((toCheckHighL.startsWith(s)) && (toCheckHigh.startsWith(s)))
-				|| ((toCheckHigh.startsWith(s)) && (toCheckHighH.startsWith(s))))
-		{
+		}else if(LexiconArrayList.get(indexLow).startsWith(s) || LexiconArrayList.get(indexMid).startsWith(s) || LexiconArrayList.get(indexHigh).startsWith(s)){
 			return true;
-		}
-		else if ((s.compareTo(toCheckLow) > 0) && (s.compareTo(toCheckMid) < 0)) {
-			indexLow++;
-			indexMid--;
-			return containsPrefixHelper(s, indexLow, ((indexLow+indexMid)/2), indexMid);
-		}
-		else if ((s.compareTo(toCheckMid) > 0) && (s.compareTo(toCheckHigh) < 0)) {
+		}else if(s.compareTo(LexiconArrayList.get(indexMid)) > 0 && s.compareTo(LexiconArrayList.get(indexHigh)) < 0){
 			indexMid++;
 			indexHigh--;
-			return containsPrefixHelper(s, indexMid, ((indexMid+indexHigh)/2), indexHigh);
+			return containsPrefixHelper(s, indexMid, ((indexMid+indexHigh)/2) ,indexHigh);
+		}else if(s.compareTo(LexiconArrayList.get(indexMid)) < 0 && s.compareTo(LexiconArrayList.get(indexLow)) > 0){
+			indexLow++;
+			indexMid--;
+			return containsPrefixHelper(s, indexLow, ((indexLow+indexMid)/2) ,indexMid);
 		}
 		return false;
-	}*/
+	}
 
 	/**
 	 * If the word is in the lexicon, returns true.
@@ -196,7 +152,7 @@ public class LexiconArrayList implements LexiconInterface {
 	 * @return True if the lexicon contains s.
 	 */
 	public boolean contains(String s) {
-		if (!LexiconArrayList.isEmpty()) {//note: took out size requirement
+		if (!LexiconArrayList.isEmpty()) {
 			return containsHelper(s, 0, LexiconArrayList.size()/2, LexiconArrayList.size()-1);
 		}
 		return false;
@@ -220,8 +176,8 @@ public class LexiconArrayList implements LexiconInterface {
 	 * @return True if the lexicon contains s.
 	 */
 	private boolean containsHelper (String s, int indexLow, int indexMid, int indexHigh) {
-		if ((s.compareTo(LexiconArrayList.get(indexLow)) < 0) || (s.compareTo(LexiconArrayList.get(indexHigh)) > 0)) { //If the word cannot be found after running contains, it will be tested next as potentially a prefix
-			return containsPrefix(s);
+		if ((s.compareTo(LexiconArrayList.get(indexLow)) < 0) || (s.compareTo(LexiconArrayList.get(indexHigh)) > 0)) { //If the word cannot be found after running contains, return false
+			return false;
 		}
 		else if ((s.compareTo(LexiconArrayList.get(indexLow)) == 0) || (s.compareTo(LexiconArrayList.get(indexMid)) == 0) || 
 				(s.compareTo(LexiconArrayList.get(indexHigh)) == 0)) {
