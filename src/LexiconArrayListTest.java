@@ -45,17 +45,26 @@ public class LexiconArrayListTest extends TestCase {
     l.load(words);
     assertTrue(l.contains("gorilla"));
     assertTrue(l.contains("every"));
-    assertTrue(l.contains("ever")); //tested by containsPrefix and its helper here
     assertTrue(l.contains("armistice"));
-    assertTrue(l.contains("arm")); //tested by containsPrefix and its helper here
+    assertTrue(l.contains("arm")); 
     assertTrue(l.contains("err"));
     assertTrue(l.contains("even"));
     assertTrue(l.contains("civil"));
+    assertTrue(l.contains("evergreen"));
     assertFalse(l.contains("agitaet"));
     assertFalse(l.contains("eventf"));
     assertFalse(l.contains("armin"));
-    assertFalse(l.contains("aloze")); //tested by containsPrefix and its helper here
-    assertFalse(l.contains("outu")); //tested by containsPrefix and its helper here
-    assertFalse(l.contains("everg")); //tested by containsPrefix and its helper here
+    assertFalse(l.contains("aloze")); 
+    assertFalse(l.contains("outu"));
+    assertFalse(l.contains("wonderf"));
+    assertTrue(l.containsPrefix("e"));
+    assertTrue(l.containsPrefix("ev"));
+    assertTrue(l.containsPrefix("eve"));
+    assertTrue(l.containsPrefix("ever"));
+    assertTrue(l.containsPrefix("everg")); 
+    assertTrue(l.containsPrefix("evergr"));
+    assertTrue(l.containsPrefix("evergre"));
+    assertTrue(l.containsPrefix("evergree"));
+    assertTrue(l.containsPrefix("evergreen")); //tested for word "evergreen" by containsPrefix
   }
 }
