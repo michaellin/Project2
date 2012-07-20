@@ -25,6 +25,7 @@ package src;
  */
 import java.util.List;
 
+
 public class AutoPlayerLexiconFirst extends AbstractPlayer {
   
   public AutoPlayerLexiconFirst(LexiconInterface lex) {

@@ -107,10 +107,32 @@ public class LexiconArrayList implements LexiconInterface {
 	 * @return True if the lexicon contains s.
 	 */
 	public boolean containsPrefix(String s) {
-		if (!LexiconArrayList.isEmpty() && s.length() >= 3) {
+		/*if (!LexiconArrayList.isEmpty() && s.length() >= 3) {
 			return containsPrefixHelper(s, 1, LexiconArrayList.size()/2, LexiconArrayList.size()-2);
 		}
-		return false;
+		return false;*/
+		
+		/*binary search then check the next largest one to see if it contains prefix, otherwise return false
+		 * 
+		 */
+		containsPrefixHelper(s, 0, LexiconArrayList.size()-1);
+	}
+	
+	private boolean containsPrefixHelper(String s, int indexLow, int indexHigh){
+		int indexMid = (indexLow + indexHigh)/2;
+		if(indexLow == indexHigh - 1){
+			return LexiconArrayList.get(indexHigh).contains(s);
+		}else if(s.compareTo(LexiconArrayList.get(indexLow)) < 0 || s.compareTo(LexiconArrayList.get(indexHigh))>0){
+			return false;
+		}else if(s.compareTo(LexiconArrayList.get(indexMid))> 0 && s.compareTo(LexiconArrayList.get(indexHigh)) < 0){
+			return containsPrefixHelper(s, indexMid, indexHigh);
+		}else if(s.compareTo(LexiconArrayList.get(indexMid))< 0 && s.compareTo(LexiconArrayList.get(indexLow)) > 0){
+			return containsPrefixHelper(s, indexLow, indexMid);
+		}else if(s.compareTo(LexiconArrayList.get(indexMid))== 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -131,7 +153,7 @@ public class LexiconArrayList implements LexiconInterface {
 	 * 
 	 * @return True if the lexicon contains s.
 	 */
-	private boolean containsPrefixHelper(String s, int indexLow, int indexMid, int indexHigh) {
+	/*private boolean containsPrefixHelper(String s, int indexLow, int indexMid, int indexHigh) {
 		String toCheckLowL = LexiconArrayList.get(indexLow-1);
 		String toCheckLow = LexiconArrayList.get(indexLow);
 		String toCheckLowH= LexiconArrayList.get(indexLow+1);
@@ -164,7 +186,7 @@ public class LexiconArrayList implements LexiconInterface {
 			return containsPrefixHelper(s, indexMid, ((indexMid+indexHigh)/2), indexHigh);
 		}
 		return false;
-	}
+	}*/
 
 	/**
 	 * If the word is in the lexicon, returns true.
@@ -174,7 +196,7 @@ public class LexiconArrayList implements LexiconInterface {
 	 * @return True if the lexicon contains s.
 	 */
 	public boolean contains(String s) {
-		if (!LexiconArrayList.isEmpty() && s.length() >= 3) {
+		if (!LexiconArrayList.isEmpty()) {//note: took out size requirement
 			return containsHelper(s, 0, LexiconArrayList.size()/2, LexiconArrayList.size()-1);
 		}
 		return false;
