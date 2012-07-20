@@ -112,83 +112,37 @@ public class LexiconArrayList implements LexiconInterface {
 		}
 		return false;
 	}
-
+	
 	/**
-	 * Recursive helper method which executes a modified binary search in order to see if the potential prefix is within the lexicon.
+	 * Recursive helper method which executes a modified binary search in order to see if a prefix is within the lexicon.
 	 * 
 	 * @param s
-	 *          The potential prefix to search for.
+	 *          The prefix to search for.
 	 *          
 	 * @param indexLow
 	 * 			The lowerbound of strings to look through in the lexicon
 	 * 
 	 * @param indexMid
-	 * 			The middle index of strings to look through in the lexicon
+	 * 			The middle of the interval of strings to look through in the lexicon
 	 * 
 	 * @param indexHigh
 	 * 			The upperbound of strings to look through in the lexicon
 	 * 
 	 * @return True if the lexicon contains s.
 	 */
-	private boolean containsPrefixHelper(String s, int indexLow, int indexMid, int indexHigh) {
-		String toCheckLowL = "";
-		String toCheckLow = "";
-		String toCheckLowH= "";
-		String toCheckMidL = "";
-		String toCheckMid = "";
-		String toCheckMidH = "";
-		String toCheckHighL = "";
-		String toCheckHigh = "";
-		String toCheckHighH = "";
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexLow-1).length()); i++) {
-			toCheckLowL += Character.toString(LexiconArrayList.get(indexLow-1).charAt(i));
-		}
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexLow).length()); i++) {
-			toCheckLow += Character.toString(LexiconArrayList.get(indexLow).charAt(i));
-		}
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexLow+1).length()); i++) {
-			toCheckLowH += Character.toString(LexiconArrayList.get(indexLow+1).charAt(i));
-		}
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexMid-1).length()); i++) {
-			toCheckMidL += Character.toString(LexiconArrayList.get(indexMid-1).charAt(i));
-		}
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexMid).length()); i++) {
-			toCheckMid += Character.toString(LexiconArrayList.get(indexMid).charAt(i));
-		}
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexMid+1).length()); i++) {
-			toCheckMidH += Character.toString(LexiconArrayList.get(indexMid+1).charAt(i));
-		}
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexHigh-1).length()); i++) {
-			toCheckHighL += Character.toString(LexiconArrayList.get(indexHigh-1).charAt(i));
-		}
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexHigh).length()); i++) {
-			toCheckHigh += Character.toString(LexiconArrayList.get(indexHigh).charAt(i));
-		}
-		for (int i = 0; i < Math.min(s.length(),LexiconArrayList.get(indexHigh+1).length()); i++) {
-			toCheckHighH += Character.toString(LexiconArrayList.get(indexHigh+1).charAt(i));
-		}
-
-		if ((s.compareTo(toCheckLowL) < 0) || (s.compareTo(toCheckHighH)) > 0) {
+	private boolean containsPrefixHelper(String s, int indexLow, int indexMid, int indexHigh){
+		if(s.compareTo(LexiconArrayList.get(indexLow)) < 0 || s.compareTo(LexiconArrayList.get(indexHigh)) > 0){
 			return false;
-		}
-		else if (((s.compareTo(toCheckLowL) == 0) && (s.compareTo(toCheckLow) == 0)) 
-				|| ((s.compareTo(toCheckLow) == 0) && (s.compareTo(toCheckLowH) == 0))
-				|| ((s.compareTo(toCheckMidL) == 0) && (s.compareTo(toCheckMid) == 0))
-				|| ((s.compareTo(toCheckMid) == 0) && (s.compareTo(toCheckMidH) == 0))
-				|| ((s.compareTo(toCheckHighL) == 0) && (s.compareTo(toCheckHigh) == 0))
-				|| ((s.compareTo(toCheckHigh) == 0) && (s.compareTo(toCheckHighH) == 0)))
-		{
+		}else if(LexiconArrayList.get(indexLow).startsWith(s) || LexiconArrayList.get(indexMid).startsWith(s) || LexiconArrayList.get(indexHigh).startsWith(s)){
 			return true;
-		}
-		else if ((s.compareTo(toCheckLow) > 0) && (s.compareTo(toCheckMid) < 0)) {
-			indexLow++;
-			indexMid--;
-			return containsPrefixHelper(s, indexLow, ((indexLow+indexMid)/2), indexMid);
-		}
-		else if ((s.compareTo(toCheckMid) > 0) && (s.compareTo(toCheckHigh) < 0)) {
+		}else if(s.compareTo(LexiconArrayList.get(indexMid)) > 0 && s.compareTo(LexiconArrayList.get(indexHigh)) < 0){
 			indexMid++;
 			indexHigh--;
-			return containsPrefixHelper(s, indexMid, ((indexMid+indexHigh)/2), indexHigh);
+			return containsPrefixHelper(s, indexMid, ((indexMid+indexHigh)/2) ,indexHigh);
+		}else if(s.compareTo(LexiconArrayList.get(indexMid)) < 0 && s.compareTo(LexiconArrayList.get(indexLow)) > 0){
+			indexLow++;
+			indexMid--;
+			return containsPrefixHelper(s, indexLow, ((indexLow+indexMid)/2) ,indexMid);
 		}
 		return false;
 	}
@@ -225,8 +179,8 @@ public class LexiconArrayList implements LexiconInterface {
 	 * @return True if the lexicon contains s.
 	 */
 	private boolean containsHelper (String s, int indexLow, int indexMid, int indexHigh) {
-		if ((s.compareTo(LexiconArrayList.get(indexLow)) < 0) || (s.compareTo(LexiconArrayList.get(indexHigh)) > 0)) { //If the word cannot be found after running contains, it will be tested next as potentially a prefix
-			return containsPrefix(s);
+		if ((s.compareTo(LexiconArrayList.get(indexLow)) < 0) || (s.compareTo(LexiconArrayList.get(indexHigh)) > 0)) { //If the word cannot be found after running contains, return false
+			return false;
 		}
 		else if ((s.compareTo(LexiconArrayList.get(indexLow)) == 0) || (s.compareTo(LexiconArrayList.get(indexMid)) == 0) || 
 				(s.compareTo(LexiconArrayList.get(indexHigh)) == 0)) {
@@ -243,5 +197,19 @@ public class LexiconArrayList implements LexiconInterface {
 			return containsHelper(s, indexMid, ((indexMid+indexHigh)/2), indexHigh);
 		}
 		return false;
+	}
+
+	/**
+	 * Method for getting the size of the lexicon.
+	 */ 
+	public int size() {
+		return LexiconArrayList.size();
+	}
+	
+	/**
+	 * Method for finding an element inside the lexicon.
+	 */
+	public String get(int n) {
+		return LexiconArrayList.get(n);
 	}
 }
