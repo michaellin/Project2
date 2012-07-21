@@ -24,6 +24,7 @@ package src;
  * CS boggle. If not, see <http://www.gnu.org/licenses/>.
  */
 import java.util.List;
+import src.LexiconTrie.TrieIterator;
 
 
 public class AutoPlayerLexiconFirst extends AbstractPlayer {
@@ -57,9 +58,9 @@ public class AutoPlayerLexiconFirst extends AbstractPlayer {
 	  else {
 		  LexiconTrie LexT = (LexiconTrie) lex;
 		  WordOnBoardFinder myFinder = new WordOnBoardFinder();
-		  LexT.initIterator();
-		  while (LexT.hasNext()) {
-			  String currentWord = LexT.next();
+		  TrieIterator itr = LexT.iterator();
+		  while (itr.hasNext()) {
+			  String currentWord = itr.next();
 			  List<BoardCell> boardCellList = myFinder.cellsForWord(board, currentWord);
 			  if (!boardCellList.isEmpty() && currentWord.length() >= minLength) {
 				  this.add(currentWord);

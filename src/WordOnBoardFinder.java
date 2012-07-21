@@ -59,7 +59,6 @@ public class WordOnBoardFinder {
 	      }
 	    }
 		if(listOfPaths.isEmpty()){
-			System.out.println("empty");
 			return new ArrayList<BoardCell>();
 		}else{
 			for(int i = 0; i < listOfPaths.get(0).size(); i++){
@@ -68,70 +67,72 @@ public class WordOnBoardFinder {
 		}
 	  }
 
-		/**
-		 * Populates the ArrayList with the matching letters found.
-		 */
-	 private static void findWord(int row, int column, BoggleBoard board, 
+	/**
+	 * Populates the ArrayList with the matching letters found.
+	 */
+	private static void findWord(int row, int column, BoggleBoard board, 
 	 								String word, int goalLength, boolean[][] used, List<BoardCell> list, ArrayList <List<BoardCell>> listOfPaths) {
-		 System.out.println();
-		 for(int i = 0; i < list.size(); i++){
-				System.out.print(board.getFace(list.get(i).row, (list.get(i)).col));
-				System.out.print(list.get(i).row + ", " + list.get(i).col + "; ");
+		if(word.equals("")&&list.size()==goalLength){
+		 	listOfPaths.add(list);
 		 }
-		 System.out.print(" " + row + " " + column + " " + used[row][column]+ " " + (list.size()==goalLength) + " " + word + " " + board.getFace(row, column));
-		 if(word.equals("")&&list.size()==goalLength){
-		 		listOfPaths.add(list);
-		 	}
-		 	else if (!word.equals("") && list.size() != goalLength) {
-				//System.out.println(word);
-				//System.out.print("row " + row + " col " + column);
-				String firstLetter = word.substring(0, 1);
-				System.out.print(board.getFace(row, column).equals(firstLetter) + " " + (row > 0 && !used[row - 1][column]));
-				if (firstLetter.equalsIgnoreCase("q")) {
-					firstLetter += word.substring(1, 2);
+		 else if (!word.equals("") && list.size() != goalLength) {
+			String firstLetter = word.substring(0, 1);
+			if (firstLetter.equalsIgnoreCase("q")) {
+				firstLetter += word.substring(1, 2);
+			}
+			if (board.getFace(row, column).equals(firstLetter)) {
+				boolean[][] newUsed = (boolean[][]) used.clone();
+				newUsed[row][column] = true;
+				list.add(new BoardCell(row, column));
+				String next;
+				if (firstLetter.equalsIgnoreCase("qu")) {
+					next = word.substring(2);	
+				} else {
+					next = word.substring(1);
 				}
-				if (board.getFace(row, column).equals(firstLetter)) {
-					//System.out.print(firstLetter);
-					boolean[][] newUsed = (boolean[][]) used.clone();
-					newUsed[row][column] = true;
-					list.add(new BoardCell(row, column));
-					String next;
-					if (firstLetter.equalsIgnoreCase("qu")) {
-						next = word.substring(2);	
-					} else {
-						next = word.substring(1);
-					}
-					if (row > 0 && !used[row - 1][column]) {
-						findWord(row - 1, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}
-					if (column < board.size() - 1 && row > 0 && !used[row - 1][column + 1]) {
-						findWord(row - 1, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}
-					if (column < board.size() - 1 && !used[row][column + 1]) {
-						findWord(row, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}
-					if (column < board.size() - 1 && row < board.size() - 1
-					                          		&& !used[row + 1][column + 1]) {
-						findWord(row + 1, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}	
-					if (row < board.size() - 1 && !used[row + 1][column]) {
-						findWord(row + 1, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}
-					if (column > 0 && row < board.size() - 1 && !used[row + 1][column - 1])	{
-						findWord(row + 1, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}
-					if (column > 0 && !used[row][column - 1]) {
-						findWord(row, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}
-					if (column > 0 && row > 0 && !used[row - 1][column - 1]) {
-						findWord(row - 1, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}else if(next.equals("")){
-						findWord(row, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
-					}
+				if (isInBounds(row - 1, column, board) && !used[row - 1][column]) {
+					findWord(row - 1, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
+				}
+				if (isInBounds(row - 1, column + 1, board) && !used[row - 1][column + 1]) {
+					findWord(row - 1, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
+				}
+				if (isInBounds(row, column + 1, board) && !used[row][column + 1]) {
+					findWord(row, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
+				}
+				if (isInBounds(row + 1, column + 1, board) && !used[row + 1][column + 1]) {
+					findWord(row + 1, column + 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
+				}	
+				if (isInBounds(row + 1, column, board) && !used[row + 1][column]) {
+					findWord(row + 1, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
+				}
+				if (isInBounds(row + 1, column - 1, board) && !used[row + 1][column - 1])	{
+					findWord(row + 1, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
+				}
+				if (isInBounds(row, column - 1, board) && !used[row][column - 1]) {
+					findWord(row, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
+				}
+				if (isInBounds(row - 1, column - 1, board) && !used[row - 1][column - 1]) {
+					findWord(row - 1, column - 1, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
+				}else if(next.equals("")){
+					findWord(row, column, board, next, goalLength, newUsed, new ArrayList <BoardCell>(list), listOfPaths);
 				}
 			}
-	 	}
-  
+		}
+	}
+	
+	 /**
+	  * Checks if the point is within the bounds of this board.
+	  * 
+	  * @param r
+	  *          is the row to check
+	  * @param c
+	  *          is the column to check
+	  * @return true If in bounds
+	  */
+	 public static boolean isInBounds(int r, int c, BoggleBoard board) {
+		 return r > 0 && (r < board.size() - 1) && c > 0 && (c < board.size() - 1);
+	 }	
+		
   private static boolean findWordWorks() {
 	// This specifically tests the helper method called within WordOnBoardFinder, using the same board as the last JUnit Test.
 	// We will start with the case in which the correct first letter "w" has been found and the helper method must now be able
