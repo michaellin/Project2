@@ -130,7 +130,7 @@ public class WordOnBoardFinder {
 	  * @return true If in bounds
 	  */
 	 public static boolean isInBounds(int r, int c, BoggleBoard board) {
-		 return r > 0 && (r < board.size() - 1) && c > 0 && (c < board.size() - 1);
+		 return r >= 0 && r < board.size() && c >= 0 && c < board.size();
 	 }	
 		
   private static boolean findWordWorks() {
@@ -142,14 +142,14 @@ public class WordOnBoardFinder {
 	BoggleBoard board = myMaker.makeBoard(boardContents);
 	List<BoardCell> toReturn = new ArrayList<BoardCell>();
 	ArrayList<List<BoardCell>> listOfPaths = new ArrayList<List<BoardCell>> ();
-	boolean [][]  alreadyUsed = new boolean [board.size()][board.size()];
-	for (int row = 0; row < board.size(); row++) {
-		for (int col = 0; col < board.size(); col++) {
-			alreadyUsed [row][col] = false;
-			findWord(row, col, board, "wonderful", "wonderful".length(), new boolean[board.size()][board.size()], 
-					toReturn, listOfPaths);
-			}	
-		}	
+    for (int r = 0; r < board.size(); r++) {
+    	for (int c = 0; c < board.size(); c++) {
+			toReturn = new ArrayList<BoardCell>();
+			 findWord(r, c, board, "wonderful", "wonderful".length(), new boolean[board.size()][board.size()], 
+			 					toReturn, listOfPaths);
+    	}
+    }
+    toReturn = listOfPaths.get(0);
 	String toCheck = "";
 	 for (int n = 0; n < toReturn.size(); n++) {
 		 toCheck += board.getFace(toReturn.get(n).row, toReturn.get(n).col);
