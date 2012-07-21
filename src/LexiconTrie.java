@@ -26,6 +26,9 @@ package src;
 
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Iterator;
 
 public class LexiconTrie implements LexiconInterface {
 	
@@ -63,7 +66,7 @@ public class LexiconTrie implements LexiconInterface {
 	 * Helper function for add. Recurses through the trie until
 	 * the word is stored at its corresponding level.
 	 */
-	private static void addHelper(String word, TrieNode node, int level) {
+	private static void addHelper (String word, TrieNode node, int level) {
 		String prefix = word.substring(0, level); 
 		if (!word.equals(prefix)) {
 			if (!node.containsPrefix(prefix)) {
@@ -82,8 +85,21 @@ public class LexiconTrie implements LexiconInterface {
      * @param s The word to search for.
      * @return True if the lexicon contains s.
      */
-    public boolean containsPrefix(String s) {
-    	return false;
+    public boolean containsPrefix (String s) {
+    	return containsPrefixHelper(s, this.myRoot, 1);
+    }
+    
+    private static boolean containsPrefixHelper (String s, TrieNode node, int level) {
+    	String prefix = s.substring(0, level);
+    	if (!s.equals(prefix)) {
+    		if (node.containsPrefix(prefix)) {
+    			return containsPrefixHelper(s, node.get(prefix), level + 1);
+    		} else {
+    			return false;
+    		}
+    	} else {
+    		return node.containsPrefix(s);
+    	}
     }
     
     /**
@@ -92,11 +108,11 @@ public class LexiconTrie implements LexiconInterface {
      * @param s The word to search for.
      * @return True if the lexicon contains s.
      */
-    public boolean contains(String s) {
+    public boolean contains (String s) {
     	return containsHelper(s, this.myRoot, 1);
     }
 
-    private static boolean containsHelper(String s, TrieNode node, int level) {
+    private static boolean containsHelper (String s, TrieNode node, int level) {
 		String prefix = s.substring(0, level); 
 		if (!s.equals(prefix)) {
 			if (node.containsPrefix(prefix)) {
@@ -108,6 +124,10 @@ public class LexiconTrie implements LexiconInterface {
             return node.containsWord(s);
 		}
 	}
+
+    public TrieIterator iterator() {
+        return new TrieIterator();
+    }
 
 
 	/**
@@ -137,6 +157,10 @@ public class LexiconTrie implements LexiconInterface {
     private static class TrieNode {
         private HashMap<String, Boolean> inDic;
         private HashMap<String, TrieNode> subTrie;
+        private ArrayList<String> itrDic;
+        private ArrayList<String> itrPrefix;
+        private int itrIndex;
+        private boolean flag;
 
         /**
          * Constructor for TrieNode
@@ -144,6 +168,10 @@ public class LexiconTrie implements LexiconInterface {
         public TrieNode() {
             inDic = new HashMap<String, Boolean> ();
             subTrie = new HashMap<String, TrieNode> (); 
+            itrDic = new ArrayList<String> ();
+            itrPrefix = new ArrayList<String> ();
+            itrIndex = 0;
+            flag = false;
         }
         
         public String toString() {
@@ -151,8 +179,8 @@ public class LexiconTrie implements LexiconInterface {
         }
 
         /**
-         *This should hash the word and search
-         *for that because of the overriden
+         * This should hash the word and search
+         * for that because of the overriden
          * hashCode()
          */
         public boolean containsWord (String word) {
@@ -165,18 +193,79 @@ public class LexiconTrie implements LexiconInterface {
         }
 
         public void put (String childWord) {
+            itrPrefix.add(childWord);
             subTrie.put(childWord, new TrieNode());
         }
 
         /**
-         * returns the Children of the current Node
+         * Returns the Children of the current Node
          */
         public TrieNode get (String word) {
             return subTrie.get(word);
         }
+        
+        public ArrayList<String> getAllPrefixes () {
+            return itrPrefix;
+        }
 
         public void putInDic(String word) {
+            flag = true;
             inDic.put(word, true);
+            itrDic.add(word);
+        }
+
+        /* TODO */
+        public boolean hasNext() {
+            return flag; //I'm using a flag because I dont want to 
+                         //remove from the arrayList.
+        }
+        
+        public String next() {
+            //System.out.println(itrIndex);
+            //System.out.println(flag);
+            String toRtn = itrDic.get(itrIndex);
+            itrIndex++;
+            if (itrIndex > itrDic.size() - 1) {
+                flag = false;
+            }
+            return toRtn;
+        }
+    }
+
+    public class TrieIterator implements Iterator {
+        private LinkedList<TrieNode> nodeQueue;
+        private TrieNode currentNode;
+
+        public TrieIterator() {
+            nodeQueue = new LinkedList<TrieNode> ();
+            currentNode = myRoot;
+            nodeQueue.add(currentNode);
+        }
+
+        public boolean hasNext() {
+            return !nodeQueue.isEmpty();
+        }
+
+        public String next() {
+            if (currentNode.hasNext()) {
+                return currentNode.next();
+            } else {
+            	while (!currentNode.hasNext()) {
+            		ArrayList<String> allPrefixes = currentNode.getAllPrefixes();
+            		for (String str : allPrefixes) {  //Getting all the possibilities
+            			nodeQueue.add(currentNode.get(str));
+            		}
+            		if (nodeQueue.size() == 0) {
+            			return "";
+            		} else {
+            			currentNode = nodeQueue.removeFirst();
+            		}
+            	}
+                return currentNode.next();
+            }
+        }
+
+        public void remove() {
         }
     }
 }

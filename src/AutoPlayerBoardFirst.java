@@ -65,7 +65,6 @@ public class AutoPlayerBoardFirst extends AbstractPlayer {
 		  this.add(soFar);
 	  }
 	  if(lex.containsPrefix(soFar)){
-		  System.out.println("got here");
 		  if (board.isInBounds(row-1, column) && !newUsed[row-1][column]) {
 			  findAllValidWordsHelper(row - 1, column, board, lex, minLength, new String (soFar), newUsed);
 		  }

@@ -35,7 +35,7 @@ import java.io.InputStream;
 public class Boggle {
   
   public static void main(String[] args) {
-    LexiconInterface lexicon = new LexiconArrayList();
+    LexiconInterface lexicon = new LexiconTrie();
     WordOnBoardFinder finder = new WordOnBoardFinder();
     
     InputStream is = lexicon.getClass().getResourceAsStream("/bogwords.txt");
