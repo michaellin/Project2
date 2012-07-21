@@ -57,6 +57,8 @@ public class LexiconArrayListTest extends TestCase {
     assertFalse(l.contains("aloze")); 
     assertFalse(l.contains("outu"));
     assertFalse(l.contains("wonderf"));
+    assertTrue(l.containsPrefix("a"));
+    assertTrue(l.containsPrefix("ab"));
     assertTrue(l.containsPrefix("e"));
     assertTrue(l.containsPrefix("ev"));
     assertTrue(l.containsPrefix("eve"));

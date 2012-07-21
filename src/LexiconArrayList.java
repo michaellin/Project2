@@ -131,10 +131,10 @@ public class LexiconArrayList implements LexiconInterface {
 	 * @return True if the lexicon contains s.
 	 */
 	private boolean containsPrefixHelper(String s, int indexLow, int indexMid, int indexHigh){
-		if(s.compareTo(LexiconArrayList.get(indexLow)) < 0 || s.compareTo(LexiconArrayList.get(indexHigh)) > 0){
-			return false;
-		}else if(LexiconArrayList.get(indexLow).startsWith(s) || LexiconArrayList.get(indexMid).startsWith(s) || LexiconArrayList.get(indexHigh).startsWith(s)){
+		if(LexiconArrayList.get(indexLow).startsWith(s) || LexiconArrayList.get(indexMid).startsWith(s) || LexiconArrayList.get(indexHigh).startsWith(s)){
 			return true;
+		}else if(s.compareTo(LexiconArrayList.get(indexLow)) < 0 || s.compareTo(LexiconArrayList.get(indexHigh)) > 0){
+				return false;
 		}else if(s.compareTo(LexiconArrayList.get(indexMid)) > 0 && s.compareTo(LexiconArrayList.get(indexHigh)) < 0){
 			indexMid++;
 			indexHigh--;

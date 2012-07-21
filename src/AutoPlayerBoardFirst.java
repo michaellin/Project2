@@ -51,19 +51,20 @@ public class AutoPlayerBoardFirst extends AbstractPlayer {
 	   * This method will run after the human player finishes entering words. */
 	  for (int r = 0; r < board.size(); r++) {
 		  for (int c = 0; c < board.size(); c++) {
-			  findAllValidWordsHelper(r,c,board,lex,minLength,new String(),new boolean[board.size()][board.size()]);
+			  findAllValidWordsHelper(r,c,board,lex,1,new String(),new boolean[board.size()][board.size()]);
 		  }
 	  }
   }
    
   private void findAllValidWordsHelper(int row, int column, BoggleBoard board, LexiconInterface lex, int minLength, String soFar, boolean[][] used){
-	  System.out.println(soFar);
 	  soFar += board.getFace(row, column);
+	  System.out.println(soFar);
 	  boolean[][] newUsed = (boolean[][]) used.clone();
 	  newUsed[row][column] = true;
 	  if(lex.contains(soFar) && soFar.length() >= minLength){
 		  this.add(soFar);
-	  }if(lex.containsPrefix(soFar)){
+	  }
+	  if(lex.containsPrefix(soFar)){
 		  if (board.isInBounds(row-1, column) && !newUsed[row-1][column]) {
 			  findAllValidWordsHelper(row - 1, column, board, lex, minLength, new String (soFar), newUsed);
 		  }

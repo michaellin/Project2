@@ -37,8 +37,8 @@ public class Boggle {
   public static void main(String[] args) {
     LexiconInterface lexicon = new LexiconTrie();
     WordOnBoardFinder finder = new WordOnBoardFinder();
-    
-    InputStream is = lexicon.getClass().getResourceAsStream("/ospd3.txt");
+    InputStream is = lexicon.getClass().getResourceAsStream("/bogwords.txt");
+
     AutoPlayerBoardFirst compPlayer = new AutoPlayerBoardFirst(lexicon);
     BoggleGUI bgui = new BoggleGUI(lexicon, finder, is, compPlayer);
   }
