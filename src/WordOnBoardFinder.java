@@ -73,7 +73,7 @@ public class WordOnBoardFinder {
 		 */
 	 private static void findWord(int row, int column, BoggleBoard board, 
 	 								String word, int goalLength, boolean[][] used, List<BoardCell> list, ArrayList <List<BoardCell>> listOfPaths) {
-		 System.out.println();
+
 		 for(int i = 0; i < list.size(); i++){
 				System.out.print(board.getFace(list.get(i).row, (list.get(i)).col));
 				System.out.print(list.get(i).row + ", " + list.get(i).col + "; ");
