@@ -58,12 +58,32 @@ public class AutoPlayerBoardFirst extends AbstractPlayer {
    
   private void findAllValidWordsHelper(int row, int column, BoggleBoard board, LexiconInterface lex, int minLength, String soFar, boolean[][] used){
 	  soFar += board.getFace(row, column);
-	  System.out.println(soFar);
-	  boolean[][] newUsed = (boolean[][]) used.clone();
+	  System.out.println();
+	  System.out.print(soFar);
+	  boolean [][] newUsed = new boolean[used.length][used.length];
+	  for(int i = 0; i<used.length; i++){
+		  for(int j = 0; j<used[i].length; j++){
+			  newUsed[i][j] = used[i][j];
+		  }
+	  }
+	 // boolean[][] newUsed = (boolean[][]) used.clone();
+	  assert(newUsed!=used);
 	  newUsed[row][column] = true;
 	  if(lex.contains(soFar) && soFar.length() >= minLength){
 		  this.add(soFar);
 	  }
+	  /* tests again
+	   * System.out.println(" "  + lex.containsPrefix(soFar));
+	  for(int i = 0; i<newUsed.length; i++){
+		  for(int j = 0; j<newUsed[i].length; j++){
+			  if(newUsed[i][j]){
+				  System.out.print("T");
+			  }else{
+				  System.out.print("f");
+			  }
+		  }
+		  System.out.println();
+	  }*/
 	  if(lex.containsPrefix(soFar)){
 		  if (board.isInBounds(row-1, column) && !newUsed[row-1][column]) {
 			  findAllValidWordsHelper(row - 1, column, board, lex, minLength, new String (soFar), newUsed);
