@@ -80,7 +80,7 @@ import javax.swing.border.TitledBorder;
 public class BoggleGUI extends JFrame {
 
   private final LexiconInterface myLexicon;
-  private AutoPlayerLexiconFirst computerPlayer;
+  private AutoPlayerBoardFirst computerPlayer;
   private Player humanPlayer;
   private final WordOnBoardFinder myFinder;
 
@@ -93,7 +93,7 @@ public class BoggleGUI extends JFrame {
   private int myBoardSize;
 
   public BoggleGUI(LexiconInterface lex, WordOnBoardFinder finder,
-                   InputStream stream, AutoPlayerLexiconFirst compPlayer) {
+                   InputStream stream, AutoPlayerBoardFirst compPlayer) {
     super("Welcome to Boggle!");
 
     myLexicon = lex;
@@ -142,7 +142,7 @@ public class BoggleGUI extends JFrame {
     repaint();
   }
 
-  private void initPlayers(AutoPlayerLexiconFirst compPlayer) {
+  private void initPlayers(AutoPlayerBoardFirst compPlayer) {
     computerPlayer = compPlayer;
     computerPlayer.setView(computerArea);
     humanPlayer = new HumanPlayer(myLexicon, "Human");

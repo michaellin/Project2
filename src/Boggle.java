@@ -39,7 +39,7 @@ public class Boggle {
     WordOnBoardFinder finder = new WordOnBoardFinder();
     
     InputStream is = lexicon.getClass().getResourceAsStream("/bogwords.txt");
-    AutoPlayerLexiconFirst compPlayer = new AutoPlayerLexiconFirst(lexicon);
+    AutoPlayerBoardFirst compPlayer = new AutoPlayerBoardFirst(lexicon);
     BoggleGUI bgui = new BoggleGUI(lexicon, finder, is, compPlayer);
   }
   

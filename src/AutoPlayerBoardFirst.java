@@ -1,4 +1,7 @@
 package src;
+
+import java.util.ArrayList;
+
 /**
  * Copyright (C) 2002 Michael Green <mtgreen@cs.ucsd.edu>
  * 
@@ -41,16 +44,56 @@ public class AutoPlayerBoardFirst extends AbstractPlayer {
    * @param minLength
    *          of words found by an autoplayer
    */
-  public void findAllValidWords(BoggleBoard board, LexiconInterface lex,
-                                int minLength) {
-    /* TODO: Given a board and a lexicon, use the add() in AbstractPlayer.java
-     * to add all words that are both in the board and in the lexicon.
-     * 
-     * This method will run after the human player finishes entering words. */
+  public void findAllValidWords(BoggleBoard board, LexiconInterface lex, int minLength) {
+	  /* TODO: Given a board and a lexicon, use the add() in AbstractPlayer.java
+	   * to add all words that are both in the board and in the lexicon.
+	   * 
+	   * This method will run after the human player finishes entering words. */
+	  for (int r = 0; r < board.size(); r++) {
+		  for (int c = 0; c < board.size(); c++) {
+			  findAllValidWordsHelper(r,c,board,lex,1,new String(),new boolean[board.size()][board.size()]);
+		  }
+	  }
   }
-  
+   
+  private void findAllValidWordsHelper(int row, int column, BoggleBoard board, LexiconInterface lex, int minLength, String soFar, boolean[][] used){
+	  soFar += board.getFace(row, column);
+	  System.out.println(soFar);
+	  boolean[][] newUsed = (boolean[][]) used.clone();
+	  newUsed[row][column] = true;
+	  if(lex.contains(soFar) && soFar.length() >= minLength){
+		  this.add(soFar);
+	  }
+	  if(lex.containsPrefix(soFar)){
+		  if (board.isInBounds(row-1, column) && !newUsed[row-1][column]) {
+			  findAllValidWordsHelper(row - 1, column, board, lex, minLength, new String (soFar), newUsed);
+		  }
+		  if (board.isInBounds(row-1, column+1) && !newUsed[row-1][column+1]) {
+			  findAllValidWordsHelper(row - 1, column + 1, board, lex, minLength, new String (soFar), newUsed);
+		  }
+		  if (board.isInBounds(row, column+1)  && !newUsed[row][column+1]) {
+			  findAllValidWordsHelper(row, column + 1, board, lex, minLength, new String (soFar), newUsed);
+		  }
+		  if (board.isInBounds(row+1, column+1) && !newUsed[row+1][column+1]) {
+			  findAllValidWordsHelper(row + 1, column + 1, board, lex, minLength, new String (soFar), newUsed);
+		  }	
+		  if (board.isInBounds(row+1, column) && !newUsed[row+1][column]) {
+			  findAllValidWordsHelper(row + 1, column, board, lex, minLength, new String (soFar), newUsed);
+		  }
+		  if (board.isInBounds(row+1, column-1) && !newUsed[row+1][column-1])	{
+			  findAllValidWordsHelper(row + 1, column-1, board, lex, minLength, new String (soFar), newUsed);
+		  }
+		  if (board.isInBounds(row, column-1) && !newUsed[row][column-1]) {
+			  findAllValidWordsHelper(row, column-1, board, lex, minLength, new String (soFar), newUsed);
+		  }
+		  if (board.isInBounds(row-1, column-1) && !newUsed[row-1][column-1]) {
+			  findAllValidWordsHelper(row - 1, column - 1, board, lex, minLength, new String (soFar), newUsed);
+		  }
+	  }
+  }
+
   @Override
   public String getName() {
-    return "AutoPlayer";
+	  return "AutoPlayer";
   }
 }
