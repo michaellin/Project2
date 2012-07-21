@@ -86,7 +86,20 @@ public class LexiconTrie implements LexiconInterface {
      * @return True if the lexicon contains s.
      */
     public boolean containsPrefix (String s) {
-    	return false;
+    	return containsPrefixHelper(s, this.myRoot, 1);
+    }
+    
+    private static boolean containsPrefixHelper (String s, TrieNode node, int level) {
+    	String prefix = s.substring(0, level);
+    	if (!s.equals(prefix)) {
+    		if (node.containsPrefix(prefix)) {
+    			return containsPrefixHelper(s, node.get(prefix), level + 1);
+    		} else {
+    			return false;
+    		}
+    	} else {
+    		return node.containsPrefix(s);
+    	}
     }
     
     /**
