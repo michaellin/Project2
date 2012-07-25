@@ -38,8 +38,8 @@ public class MatchingLexiconsTest extends TestCase{
 		BoardMaker myMaker = new BoardMaker();
 		LexiconInterface lexAL = new LexiconArrayList();
 		LexiconInterface lexTrie = new LexiconTrie();
-		lexAL.load(words);
 		lexTrie.load(words);
+		lexAL.load(words);
 		String[] boardContents = { "owonu", "owufu", "nolrf", "dnder", "dderr" };
 		BoggleBoard board = myMaker.makeBoard(boardContents);
 		AutoPlayerLexiconFirst lexie = new AutoPlayerLexiconFirst(lexAL);
@@ -54,9 +54,8 @@ public class MatchingLexiconsTest extends TestCase{
 		System.out.println("The size of lexor's words is: " + lexor.myWords.size());
 		System.out.println("The size of boardie's words is: " + boardie.myWords.size());
 		System.out.println("The size of boarder's words is: " + boarder.myWords.size());
-		assertTrue(lexie.myWords.size() == lexor.myWords.size() 
-				/*&& lexor.myWords.size() == boardie.myWords.size()
-				&& boardie.myWords.size() == boarder.myWords.size()*/);
+		assertTrue(lexor.myWords.size() == boarder.myWords.size());
+		assertTrue(lexie.myWords.size() == boardie.myWords.size());
 	}
 	
 }

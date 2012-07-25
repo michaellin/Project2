@@ -18,7 +18,7 @@ public class SpeedTestLexiconArrayList {
         test.load(sc);
     
         t.start();
-        for(int i = 0; i< 2000; i++){
+        for(int i = 0; i< 1000; i++){
         	test.contains("gorilla");
         	test.contains("every");
         	test.contains("ever"); 
