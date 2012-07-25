@@ -57,18 +57,8 @@ public class LexiconTrieTest extends TestCase {
     assertTrue(l.contains("gorilla"));
     assertFalse(l.contains("armin"));
   }
-
-  @Deprecated
-  /**
-   * A big data set test for the lexicon. 
-   */
-  //public void testBigLexicon() {
-    //l.load(bigWords);
-  //}
   
-  public void testBigLexiconSpeed() {
-  	assertTrue(l.contains("civil"));
-  	assertFalse(l.contains("agitatet"));
+  public void testHelpers() {
+	  assertTrue(LexiconTrie.helpersWork());
   }
-  
 }
