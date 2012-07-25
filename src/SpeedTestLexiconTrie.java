@@ -15,26 +15,26 @@ class SpeedTestLexiconTrie {
         	e.printStackTrace();
         }
         test.load(sc);
-        int tries = 1000;
         t.start();
-        while (tries > 0) {
-        	test.contains("administratrix");
-        	tries --;
+        for(int i = 0; i< 2000; i++){
+        	test.contains("gorilla");
+        	test.contains("every");
+        	test.contains("ever"); 
+        	test.contains("armistice");
+        	test.contains("arm"); 
+        	test.contains("err");
+        	test.contains("even");
+        	test.contains("civil");
+        	test.contains("agitaet");
+        	test.contains("eventf");
+        	test.contains("armin");
+        	test.contains("aloze"); 
+        	test.contains("outu"); 
+        	test.contains("everg");
+        	test.contains("hoohi");
+        	test.contains("randomawtb");
+        	test.contains("reallist");
         }
-        test.contains("gorilla");
-        test.contains("every");
-        test.contains("ever"); 
-        test.contains("armistice");
-        test.contains("arm"); 
-        test.contains("err");
-        test.contains("even");
-        test.contains("civil");
-        test.contains("agitaet");
-        test.contains("eventf");
-        test.contains("armin");
-        test.contains("aloze"); 
-        test.contains("outu"); 
-        test.contains("everg");
         long time = t.stop();
         System.out.println(time + " miliseconds elapsed");
     }

@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 public class MatchingLexiconsTest extends TestCase{
 	private Scanner words;
-	private Scanner sameWords;
+	//private Scanner sameWords;
 	/**
 	 * 
 	 */
@@ -25,21 +25,21 @@ public class MatchingLexiconsTest extends TestCase{
 	  }
 
 	
-	public void setUp2(){
+	/*public void setUp2(){
 		try{
 			sameWords = new Scanner(new File("bogwords.txt"));
 		}catch(FileNotFoundException e){
 			System.out.println(e);
 				assertTrue(false);
 		}
-	}
+	}*/
 	
 	public void testMatchingLexicons() {
 		BoardMaker myMaker = new BoardMaker();
 		LexiconInterface lexAL = new LexiconArrayList();
-		lexAL.load(words);
 		LexiconInterface lexTrie = new LexiconTrie();
-		lexTrie.load(sameWords);
+		lexAL.load(words);
+		lexTrie.load(words);
 		String[] boardContents = { "owonu", "owufu", "nolrf", "dnder", "dderr" };
 		BoggleBoard board = myMaker.makeBoard(boardContents);
 		AutoPlayerLexiconFirst lexie = new AutoPlayerLexiconFirst(lexAL);
