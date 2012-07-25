@@ -134,7 +134,7 @@ public class LexiconArrayList implements LexiconInterface {
 		if(LexiconArrayList.get(indexLow).startsWith(s) || LexiconArrayList.get(indexMid).startsWith(s) || LexiconArrayList.get(indexHigh).startsWith(s)){
 			return true;
 		}else if(s.compareTo(LexiconArrayList.get(indexLow)) < 0 || s.compareTo(LexiconArrayList.get(indexHigh)) > 0){
-				return false;
+			return false;
 		}else if(s.compareTo(LexiconArrayList.get(indexMid)) > 0 && s.compareTo(LexiconArrayList.get(indexHigh)) < 0){
 			indexMid++;
 			indexHigh--;

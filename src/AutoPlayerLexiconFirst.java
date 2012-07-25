@@ -55,7 +55,7 @@ public class AutoPlayerLexiconFirst extends AbstractPlayer {
 			  }
 		  }
 	  }
-	  else {
+	 else {
 		  LexiconTrie LexT = (LexiconTrie) lex;
 		  WordOnBoardFinder myFinder = new WordOnBoardFinder();
 		  TrieIterator itr = LexT.iterator();
