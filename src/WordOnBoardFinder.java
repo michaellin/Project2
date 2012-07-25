@@ -140,9 +140,10 @@ public class WordOnBoardFinder {
 	 }	
 		
   private static boolean findWordWorks() {
-	// This specifically tests the helper method called within WordOnBoardFinder, using the same board as the last JUnit Test.
-	// We will start with the case in which the correct first letter "w" has been found and the helper method must now be able
-	// to find the word wonderful on its own without the cellsForWord method being called again. Note: no q's in this test.
+	/**This specifically tests the helper method called within WordOnBoardFinder, using the same board as the last JUnit Test.
+	 * We will start with the case in which the correct first letter "w" has been found and the helper method must now be able
+	 * to find the word wonderful on its own without the cellsForWord method being called again. Note: no q's in this test.
+	 */
 	BoardMaker myMaker = new BoardMaker();
 	String[] boardContents = { "owonu", "owufu", "nolrf", "dnder", "dderr" };
 	BoggleBoard board = myMaker.makeBoard(boardContents);
