@@ -51,7 +51,7 @@ public class AutoPlayerBoardFirst extends AbstractPlayer {
 	   * This method will run after the human player finishes entering words. */
 	  for (int r = 0; r < board.size(); r++) {
 		  for (int c = 0; c < board.size(); c++) {
-			  findAllValidWordsHelper(r,c,board,lex,1,new String(),new boolean[board.size()][board.size()]);
+			  findAllValidWordsHelper(r,c,board,lex,minLength,new String(),new boolean[board.size()][board.size()]);
 		  }
 	  }
   }
@@ -59,35 +59,34 @@ public class AutoPlayerBoardFirst extends AbstractPlayer {
   private void findAllValidWordsHelper(int row, int column, BoggleBoard board, LexiconInterface lex, int minLength, String soFar, boolean[][] used){
 	  soFar += board.getFace(row, column);
 	  System.out.println(soFar);
-	  boolean[][] newUsed = (boolean[][]) used.clone();
-	  newUsed[row][column] = true;
+	  used[row][column] = true;
 	  if(lex.contains(soFar) && soFar.length() >= minLength){
 		  this.add(soFar);
 	  }
 	  if(lex.containsPrefix(soFar)){
-		  if (board.isInBounds(row-1, column) && !newUsed[row-1][column]) {
-			  findAllValidWordsHelper(row - 1, column, board, lex, minLength, new String (soFar), newUsed);
+		  if (board.isInBounds(row-1, column) && !used[row-1][column]) {
+			  findAllValidWordsHelper(row - 1, column, board, lex, minLength, new String (soFar), (boolean[][]) used.clone());
 		  }
-		  if (board.isInBounds(row-1, column+1) && !newUsed[row-1][column+1]) {
-			  findAllValidWordsHelper(row - 1, column + 1, board, lex, minLength, new String (soFar), newUsed);
+		  if (board.isInBounds(row-1, column+1) && !used[row-1][column+1]) {
+			  findAllValidWordsHelper(row - 1, column + 1, board, lex, minLength, new String (soFar), (boolean[][]) used.clone());
 		  }
-		  if (board.isInBounds(row, column+1)  && !newUsed[row][column+1]) {
-			  findAllValidWordsHelper(row, column + 1, board, lex, minLength, new String (soFar), newUsed);
+		  if (board.isInBounds(row, column+1)  && !used[row][column+1]) {
+			  findAllValidWordsHelper(row, column + 1, board, lex, minLength, new String (soFar), (boolean[][]) used.clone());
 		  }
-		  if (board.isInBounds(row+1, column+1) && !newUsed[row+1][column+1]) {
-			  findAllValidWordsHelper(row + 1, column + 1, board, lex, minLength, new String (soFar), newUsed);
+		  if (board.isInBounds(row+1, column+1) && !used[row+1][column+1]) {
+			  findAllValidWordsHelper(row + 1, column + 1, board, lex, minLength, new String (soFar), (boolean[][]) used.clone());
 		  }	
-		  if (board.isInBounds(row+1, column) && !newUsed[row+1][column]) {
-			  findAllValidWordsHelper(row + 1, column, board, lex, minLength, new String (soFar), newUsed);
+		  if (board.isInBounds(row+1, column) && !used[row+1][column]) {
+			  findAllValidWordsHelper(row + 1, column, board, lex, minLength, new String (soFar), (boolean[][]) used.clone());
 		  }
-		  if (board.isInBounds(row+1, column-1) && !newUsed[row+1][column-1])	{
-			  findAllValidWordsHelper(row + 1, column-1, board, lex, minLength, new String (soFar), newUsed);
+		  if (board.isInBounds(row+1, column-1) && !used[row+1][column-1])	{
+			  findAllValidWordsHelper(row + 1, column-1, board, lex, minLength, new String (soFar), (boolean[][]) used.clone());
 		  }
-		  if (board.isInBounds(row, column-1) && !newUsed[row][column-1]) {
-			  findAllValidWordsHelper(row, column-1, board, lex, minLength, new String (soFar), newUsed);
+		  if (board.isInBounds(row, column-1) && !used[row][column-1]) {
+			  findAllValidWordsHelper(row, column-1, board, lex, minLength, new String (soFar), (boolean[][]) used.clone());
 		  }
-		  if (board.isInBounds(row-1, column-1) && !newUsed[row-1][column-1]) {
-			  findAllValidWordsHelper(row - 1, column - 1, board, lex, minLength, new String (soFar), newUsed);
+		  if (board.isInBounds(row-1, column-1) && !used[row-1][column-1]) {
+			  findAllValidWordsHelper(row - 1, column - 1, board, lex, minLength, new String (soFar), (boolean[][]) used.clone());
 		  }
 	  }
   }
