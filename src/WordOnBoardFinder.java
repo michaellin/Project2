@@ -72,21 +72,6 @@ public class WordOnBoardFinder {
 	 */
 	private static void findWord(int row, int column, BoggleBoard board, 
 	 								String word, int goalLength, boolean[][] used, List<BoardCell> list, ArrayList <List<BoardCell>> listOfPaths) {
-		/*these are tests for the bool array
-		 * for(int i = 0; i<list.size(); i++){
-			System.out.print(board.getFace(list.get(i).row, list.get(i).col));
-		}
-		System.out.println();
-		for(int i = 0; i<used.length; i++){
-			  for(int j = 0; j<used[i].length; j++){
-				  if(used[i][j]){
-					  System.out.print("T");
-				  }else{
-					  System.out.print("f");
-				  }
-			  }
-			  System.out.println();
-		}*/
 		
 		if(word.equals("")&&list.size()==goalLength){
 		 	listOfPaths.add(list);
