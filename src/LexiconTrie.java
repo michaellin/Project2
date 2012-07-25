@@ -24,8 +24,11 @@ package src;
  * CS boggle. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -79,6 +82,15 @@ public class LexiconTrie implements LexiconInterface {
 		}
 	}
 
+    private static boolean addHelperWorks() {
+        TrieNode test = new TrieNode();
+        addHelper("hello", test, 1);
+        boolean first = containsPrefixHelper("he", test, 1);
+        boolean second = containsHelper("hello", test, 1);
+        return first && second;
+    }
+
+
     /**
      * If the prefix is in the lexicon, returns true.
      * 
@@ -89,6 +101,11 @@ public class LexiconTrie implements LexiconInterface {
     	return containsPrefixHelper(s, this.myRoot, 1);
     }
     
+    /**
+     * Helper method for containsPrefix. Recurses down into the trie to check if the
+     * prefix is valid.
+     * @return boolean
+     */
     private static boolean containsPrefixHelper (String s, TrieNode node, int level) {
     	String prefix = s.substring(0, level);
     	if (!s.equals(prefix)) {
@@ -101,6 +118,17 @@ public class LexiconTrie implements LexiconInterface {
     		return node.containsPrefix(s);
     	}
     }
+
+    private static boolean containsPrefixHelperWorks() {
+        TrieNode test = new TrieNode();
+        addHelper("hello", test, 1);
+        addHelper("world", test, 1);
+        boolean first = containsPrefixHelper("he", test, 1);
+        boolean second = containsPrefixHelper("hello", test, 1);
+        boolean third = containsPrefixHelper("wor", test, 1);
+        boolean fourth = containsPrefixHelper("worlds", test, 1);
+        return first && second && third && !fourth;
+    }
     
     /**
      * If the word is in the lexicon, returns true.
@@ -112,6 +140,11 @@ public class LexiconTrie implements LexiconInterface {
     	return containsHelper(s, this.myRoot, 1);
     }
 
+    /**
+     * Helper method for contains(). Recurses down into the trie and check if the
+     * word is contained inDic at the prefix node or leaf.
+     * @return boolean
+     */
     private static boolean containsHelper (String s, TrieNode node, int level) {
 		String prefix = s.substring(0, level); 
 		if (!s.equals(prefix)) {
@@ -125,10 +158,43 @@ public class LexiconTrie implements LexiconInterface {
 		}
 	}
 
+    private static boolean containsHelperWorks() {
+        TrieNode test = new TrieNode();
+        addHelper("hello", test, 1);
+        addHelper("cat", test, 1);
+        addHelper("world", test, 1);
+        boolean first = containsHelper("cat", test, 1);
+        boolean second = containsHelper("hello", test, 1);
+        boolean third = containsHelper("wor", test, 1);
+        boolean fourth = containsHelper("world", test, 1);
+        return first && second && !third && fourth;
+    }
+
     public TrieIterator iterator() {
         return new TrieIterator();
     }
-
+    
+    private static boolean iteratorWorks() {
+    	LexiconTrie lex = new LexiconTrie();
+    	Scanner mySmallDictionary = null;
+        try {
+            mySmallDictionary = new Scanner(new File("smalltestwords.txt"));
+          } catch (FileNotFoundException e) {
+            System.out.println(e);
+          }
+    	lex.load(mySmallDictionary);
+    	Iterator itr = lex.iterator();
+    	ArrayList<String> check = new ArrayList<String> ();
+    	while (itr.hasNext()) {
+    		check.add((String) itr.next());
+    	}
+    	System.out.println(check.size());
+    	if (check.size() == 10) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
 
 	/**
 	 * Load the words from an input source and store them in this lexicon.
@@ -149,13 +215,37 @@ public class LexiconTrie implements LexiconInterface {
        */
         }
     }
+    
+    public static boolean helpersWork() {
+        if (!addHelperWorks()) {
+            return false;
+        }
+        if (!containsPrefixHelperWorks()) { 
+            return false;
+        }
+        if (!containsHelperWorks()) {
+            return false;
+        }
+        if (!iteratorWorks()) {
+        	return false;
+        }
+        return true;
+    }
 
     /**
-     * A TrieNode that contains the prefixes 
-     * and its subTries.
+     * A TrieNode that stores words as prefixes in
+     * different Trie levels.
+     * inDic determines if the prefix is an existing word.
+     * subTrie contains the existing word. HashSet is used for fast lookup.
+     * itrDic and itr Prefix are used for an easier iteration over
+     * the words or prefixes.
+     * 
+     * Note: The TrieNodes themselves don\'t contain their identities (their words).
+     * 		 That is contained in the subTrie of their parent TrieNode.
+     * 
      */
     private static class TrieNode {
-        private HashMap<String, Boolean> inDic;
+        private HashSet<String> inDic;
         private HashMap<String, TrieNode> subTrie;
         private ArrayList<String> itrDic;
         private ArrayList<String> itrPrefix;
@@ -166,7 +256,7 @@ public class LexiconTrie implements LexiconInterface {
          * Constructor for TrieNode
          */
         public TrieNode() {
-            inDic = new HashMap<String, Boolean> ();
+            inDic = new HashSet<String> ();
             subTrie = new HashMap<String, TrieNode> (); 
             itrDic = new ArrayList<String> ();
             itrPrefix = new ArrayList<String> ();
@@ -174,55 +264,82 @@ public class LexiconTrie implements LexiconInterface {
             flag = false;
         }
         
+        /**
+         * A recursive toString through the Trie.
+         * @return String
+         */
         public String toString() {
         	return subTrie.toString();
         }
 
         /**
-         * This should hash the word and search
-         * for that because of the overriden
-         * hashCode()
+         * A fast lookup for if the queried prefix is 
+         * an existing word.
+         * @return boolean
          */
         public boolean containsWord (String word) {
-            Boolean toRtn = inDic.get(word);
-            return (toRtn != null)? toRtn : false;
+            return inDic.contains(word);
         }
 
+        /**
+		 * A fast lookup for if the queried prefix exists.
+		 * @return boolean
+         */
         public boolean containsPrefix(String prefix) {
             return subTrie.containsKey(prefix);
         }
 
+        /**
+         * Adds the new Prefix into the itrPrefix
+         * and also hashes it with a new Child TrieNode
+         * in subTrie.
+         * 
+         */
         public void put (String childWord) {
             itrPrefix.add(childWord);
             subTrie.put(childWord, new TrieNode());
         }
 
         /**
-         * Returns the Children of the current Node
+         * Returns the child of the current Node.
+         * @return TrieNode
          */
         public TrieNode get (String word) {
             return subTrie.get(word);
         }
         
+        /**
+         * Returns a collection of all the prefix children 
+         * contained in a TrieNode.
+         * @return ArrayList
+         */
         public ArrayList<String> getAllPrefixes () {
             return itrPrefix;
         }
 
         public void putInDic(String word) {
             flag = true;
-            inDic.put(word, true);
+            inDic.add(word);
             itrDic.add(word);
         }
 
-        /* TODO */
+        /**
+         * This convenience method is used to iterate over each
+         * TrieNode's children. The flag is only true after the
+         * first child has been added and it turns false only when
+         * itrIndex has reached the last item in itrDic.
+         * @return
+         */
         public boolean hasNext() {
-            return flag; //I'm using a flag because I dont want to 
-                         //remove from the arrayList.
+            return flag;
         }
         
+        /**
+         * Returns the prefix child at the itrIndex position.
+         * itrIndex is the index of the child about to be returned.
+         * @return
+         */
         public String next() {
-            //System.out.println(itrIndex);
-            //System.out.println(flag);
             String toRtn = itrDic.get(itrIndex);
             itrIndex++;
             if (itrIndex > itrDic.size() - 1) {
@@ -232,27 +349,43 @@ public class LexiconTrie implements LexiconInterface {
         }
     }
 
+    /**
+     * LexiconTrie's iterator.
+     * @author MichaelLin
+     *
+     */
     public class TrieIterator implements Iterator {
         private LinkedList<TrieNode> nodeQueue;
         private TrieNode currentNode;
 
+        /**
+         * Iterator's constructor.
+         * Uses a queue to do a breath first search.
+         * 
+         */
         public TrieIterator() {
             nodeQueue = new LinkedList<TrieNode> ();
             currentNode = myRoot;
             nodeQueue.add(currentNode);
         }
 
+        
         public boolean hasNext() {
             return !nodeQueue.isEmpty();
         }
 
+        /**
+         * Iterates over a TrieNode. If the TrieNode doesn't have
+         * a next it will add all its child and change the current
+         * visited node to the next node in the queue. 
+         */
         public String next() {
             if (currentNode.hasNext()) {
                 return currentNode.next();
             } else {
             	while (!currentNode.hasNext()) {
             		ArrayList<String> allPrefixes = currentNode.getAllPrefixes();
-            		for (String str : allPrefixes) {  //Getting all the possibilities
+            		for (String str : allPrefixes) {
             			nodeQueue.add(currentNode.get(str));
             		}
             		if (nodeQueue.size() == 0) {
@@ -266,6 +399,7 @@ public class LexiconTrie implements LexiconInterface {
         }
 
         public void remove() {
+        	throw new UnsupportedOperationException("Remove method not supported");
         }
     }
 }
